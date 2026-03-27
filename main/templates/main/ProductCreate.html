@@ -1,0 +1,23 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block section %}
+
+    <form method="post">
+    {% csrf_token %}
+
+    {{ form.category }}
+
+    <select id="subcategory"></select>
+
+    {{ form.name }}
+
+    {{form.attributvalue}}
+    {{ form.price }}
+
+    <button type="submit">Create</button>
+    </form> 
+
+
+        <script src="{% static 'main/js/SubCategory.js' %}"></script>
+{% endblock section %}
+

@@ -1,0 +1,11 @@
+{% extends "main/base.html" %}
+
+{% block section %}
+    <form action="{% url 'users:register' %}" method='POST'>
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Создать</button>
+    </form>
+
+{% endblock section %}
+

@@ -1,0 +1,12 @@
+{% extends "main/base.html" %}
+
+{% block section %}
+
+    {% for like in likes %}
+        <p>{{like.product.title}}</p>
+        <p>{{like.product.price}}</p>
+        {% endfor %}
+
+{% endblock section %}
+
+

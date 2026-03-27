@@ -1,0 +1,13 @@
+{% extends "main/base.html" %}
+
+{% block section %}
+
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Изменить</button>
+    </form>
+
+{% endblock section %}
+
+

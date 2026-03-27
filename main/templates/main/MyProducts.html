@@ -1,0 +1,13 @@
+{% extends "main/base.html" %}
+{% block section %}
+
+    {% for product in products %}
+        <a href="{% url 'main:Product' pk=product.id%}">
+            <p>{{product.title}}</p></a>
+            <p>{{product.price}}</p>
+        
+    {% endfor %}
+
+{% endblock section %}
+
+

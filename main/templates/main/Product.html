@@ -1,0 +1,39 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block section %}
+    <H1>Информация о продукте</H1>
+    {% if product.author == request.user %}
+        <a href="{% url 'main:ProductUpdate' product.id %}">Изменить</a>
+        <button onclick="openModal()">Delete</button>
+        <div id="deleteModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
+    
+            <div style="background:white; padding:20px; width:300px; margin:200px auto; text-align:center;">
+                <p>Ты точно хочешь удалить?</p>
+    
+                <form method="post" action="{% url 'main:ProductDelete' product.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Да, удалить</button>
+                </form>
+    
+                <button onclick="closeModal()">Отмена</button>
+            </div>
+    
+        </div>
+    {% endif %}
+    
+    <img
+        class="like"
+        style="cursor: pointer; height: 50px;width: 50px;"
+        src="{% static 'main/image/black_heart.png' %}" 
+        data-url="{% url 'main:ProductLike' %}"
+        data-product-id="{{product.id}}"
+        data-black-heart="{% static 'main/image/black_heart.png' %}"
+        data-red-heart="{% static 'main/image/red_heart.png' %}"
+        alt=""
+    >
+
+
+
+
+<script src="{% static 'main/js/like.js' %}"></script>    
+{% endblock section %}

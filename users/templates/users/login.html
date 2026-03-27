@@ -1,0 +1,16 @@
+{% extends "main/base.html" %}
+
+{% block section %}
+
+    <p>У вас нету аккаунта?</p>
+    <p>Можете зарегестрироваться здесь <a href="{% url 'users:register' %}">Регистрация</a></p>
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+    <form action="{% url "users:login" %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="username">
+        <input type="password" name="password" placeholder="password">
+        <button type="submit">Войти</button>
+    </form>
+{% endblock section %}

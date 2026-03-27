@@ -1,0 +1,8 @@
+<h2>Ты точно хочешь удалить "{{ object.title }}"?</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Да, удалить</button>
+</form>
+
+<a href="{% url 'main:Product' product.id %}">Отмена</a>
