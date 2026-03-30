@@ -3,7 +3,7 @@
 
     {% for product in products %}
         <a href="{% url 'main:Product' pk=product.id%}">
-            <p>{{product.title}}</p></a>
+            <p>{{product.name}}</p></a>
             <p>{{product.price}}</p>
         
     {% endfor %}

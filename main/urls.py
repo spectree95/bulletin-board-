@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import Home, ProductCreate, MyProducts, ProductDetail,ProductLiked, ProductUpdate,ProductDelete
+from .views import Home,DetailCategory, ProductCreate,SubCategoryProducts, MyProducts, ProductDetail,ProductLiked, ProductUpdate,ProductDelete
 app_name = 'main'
 
 urlpatterns = [
@@ -13,4 +13,7 @@ urlpatterns = [
     path("Like/", views.ProductLike, name="ProductLike"),
     path("ProductLiked/", ProductLiked.as_view(), name="ProductLiked"),
     path("ajax/load-subcategories/", views.load_subcategories, name="ajax_load_subcategories"),
+    path("ajax/load-attributes/", views.load_attributes, name="ajax_load-attributes/"),
+    path("category/<int:pk>",DetailCategory.as_view(),name='category' ),
+    path("products/<int:pk>", SubCategoryProducts.as_view(), name="SubCategoryProducts")
 ]

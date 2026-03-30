@@ -9,94 +9,119 @@
     <link rel="stylesheet" href="{% static 'main/css/base.css' %}">
 
 </head>
-<body>
+<body class="page-wrapper">
     <header>
-        <nav class='navbar'>
-            <div class="nav-body">
-                <div>
-                    <a href="{% url "main:home" %}">
-                        <img src="" alt="site-icon">
-                    </a>
-                </div>
-                <div>
-                    <div class="nav-right">
-                        <a href="#"><img src="" alt=""> чат</a>
-                        {% if user.is_authenticated%}
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{user.username}}
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="{% url 'main:MyProducts' %}" class="nav-link">Мои продукты</a></li>
-                                    <li>
-                                        <form action="{% url 'users:logout' %}" method="POST">
-                                        {% csrf_token %}
-                                        <button type="submit">Выйти</button>
-                                        </form>
-                                    </li>
-                                    <li><a class="dropdown-item" href="{% url 'main:ProductLiked' %}">Избранные</a></li>
-                                </ul>
-                            </div>        
+        <nav class="navbar custom-navbar">
+            <div class="container-fluid nav-body">
 
+                <a href="{% url 'main:home' %}" class="logo">
+                    MyMarket
+                </a>
 
-                           
-                        {% else %}
-                            <a href="{% url "users:login" %}" class="nav-link">login</a>
-                            <a href="{% url 'users:register' %}" class="nav-link">register</a>
-                        {% endif %}
-                        <a href="{% url 'main:ProductCreate' %}" class="nav-link">Подать объявление</a>
-                         
+                <form class="search-form" method="get">
+                    <div class="search-box">
+                        <input 
+                            type="text" 
+                            name="q" 
+                            placeholder="Поиск товаров..." 
+                            value="{{ request.GET.q }}"
+                        >
+                        <button type="submit">
+                            Поиск
+                        </button>
                     </div>
+                </form>
+
+                <div class="nav-right">
+                    <a href="#" class="chat-link">💬 Чат</a>
+
+                    {% if user.is_authenticated %}
+                        <div class="dropdown user-dropdown">
+                            <button class="user-btn" data-bs-toggle="dropdown">
+                                👤 {{ user.username }}
+                            </button>
+
+                            <ul class="dropdown-menu custom-dropdown">
+                                <li>
+                                <a href="{% url 'main:MyProducts' %}" class="dropdown-item-custom">
+                                     Мои продукты
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'main:ProductLiked' %}" class="dropdown-item-custom">
+                                     Избранные
+                                </a>
+                            </li>
+
+                            <li><hr class="dropdown-divider"></li>
+
+                            <li>
+                                <form action="{% url 'users:logout' %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item-custom logout-btn">
+                                         Выйти
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                    {% else %}
+                        <div class="auth-links">
+                            <a href="{% url 'users:login' %}" class="login-btn">Войти</a>
+                            <a href="{% url 'users:register' %}" class="register-btn">Регистрация</a>
+                        </div>
+                    {% endif %}
+
+                    <a href="{% url 'main:ProductCreate' %}" class="create-btn">
+                        Подать объявление
+                    </a>
                 </div>
             </div>
         </nav>
     </header>
    
-    <section style="margin: 0 100px; flex: 1;">
+    <section style="margin-top: 30px;margin-bottom: 30px;">
         {% block section %}
 
-            <div style="margin-top: 30px;margin-bottom: 30px;">
-                <form action="" method="get">   
-                    <input type="text" name="q" placeholder="Поиск по категориям"  value="{{ request.GET.q }}">
-                    <button type="submit">Поиск</button>
-                </form>
-            </div>
+        <div class="categories">
+            <h2 style="text-align: center; margin-bottom: 20px;">Категории</h2>
 
-            <div class="categories">
-                <h1 style="text-align: center;">Выберите то что вам нужно</h1>
-                {%for product in products%}
-                    <a href="{% url 'main:Product' pk=product.id %}" style="margin-left: 20px;margin-right: 20px;">
-
-                        <p>{{product.title}}</p>
+            <div class="category-grid">
+                {% for category in categories %}
+                    <a href="{% url 'main:category' pk=category.id %}" class="category-card">
+                        <div class="category-image">
+                            {% if category.img %}
+                                <img src="{{ category.img.url }}" alt="{{ category.name }}">
+                            {% else %}
+                            <div class="placeholder">Фото</div>
+                            {% endif %}
+                        </div>
+                        <div class="category-info">
+                            <h5>{{ category.name }}</h5>
+                            <p class="subcategory-count">
+                                Подкатегорий: {{ category.subcategory_set.count }}
+                            </p>
+                        </div>
                     </a>
-
-                       
                 {% endfor %}
             </div>
+        </div>
+
         {% endblock section %}
     </section>
 
-    <footer>
-        <hr>
-        <div class="footer-main">
-            <div class="footer-body">
-                <div class="footer-1">
-                    <div class="footer-links">
-                        <a href="">link1</a>
-                        <a href="">link1</a>
-                        <a href="">link1</a>
-                        <a href="">link1</a>
-                    </div>
+    <footer class="footer">
+        <div class="footer-container">
+            <div>
+                <h4>MyMarket</h4>
+                <p>Лучшие объявления в одном месте</p>
+            </div>
 
-                    <div class="footer-links">
-                        <a href="">link1</a>
-                        <a href="">link1</a>
-                        <a href="">link1</a>
-                        <a href="">link1</a>
-                    </div>
-                </div>
-
-                <div>awnfwfk</div>
+            <div>
+                <a href="#">О нас</a>
+                <a href="#">Контакты</a>
+                <a href="#">Помощь</a>
             </div>
         </div>
     </footer>

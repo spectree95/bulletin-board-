@@ -7,17 +7,18 @@
 
     {{ form.category }}
 
-    <select id="subcategory"></select>
+    {{ form.subcategory }}
 
     {{ form.name }}
 
-    {{form.attributvalue}}
+    <div id="attributes"></div>
+
     {{ form.price }}
 
     <button type="submit">Create</button>
     </form> 
 
-
-        <script src="{% static 'main/js/SubCategory.js' %}"></script>
+    <script src="{% static 'main/js/SubCategory.js' %}"></script>
+    <script src="{% static 'main/js/attributes.js' %}"></script>
 {% endblock section %}
 

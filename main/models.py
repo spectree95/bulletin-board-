@@ -30,7 +30,7 @@ class SubCategory(models.Model):
 
 class Attribute(models.Model):
     name = models.CharField(max_length=50)
-    subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
+    subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="attributes")
     
     def __str__(self):
         return self.name
@@ -39,7 +39,7 @@ class Attribute(models.Model):
 
 class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    subcategory = models.ForeignKey(SubCategory,on_delete=models.CASCADE)
+    subcategory = models.ForeignKey(SubCategory,on_delete=models.CASCADE, related_name="products")
     name = models.CharField(max_length=50)
     description = models.TextField()
     price = models.DecimalField(max_digits=20,decimal_places=2,blank=False) 

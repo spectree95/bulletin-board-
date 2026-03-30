@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+
+{% load static %}
+
+{% block title %}{{ category.name }}{% endblock title %}
+
+{% block section %}
+<section style="margin: 30px 100px;">
+    <h2 style="text-align: center; margin-bottom: 25px;">{{ category.name }}</h2>
+    <div class="subcategory-grid">
+        {% for subcategory in category.subcategory_set.all %}
+            <a href="{% url 'main:SubCategoryProducts' pk=subcategory.id %}" class="subcategory-card">
+                <div class="subcategory-image">
+                    <!-- Пока плейсхолдер, потом можно заменить на реальное изображение -->
+                    <div class="placeholder">Фото</div>
+                </div>
+                <div class="subcategory-info">
+                    <h5>{{ subcategory.name }}</h5>
+                    <p class="product-count">
+                        Товаров: {{ subcategory.products.count }}
+                    </p>
+                </div>
+            </a>
+        {% empty %}
+        <p style="text-align:center;">Нет подкатегорий в этой категории</p>
+        {% endfor %}
+    </div>
+</section>
+<link rel="stylesheet" href="{% static 'main/css/category.css' %}">
+{% endblock section %}

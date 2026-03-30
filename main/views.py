@@ -2,10 +2,11 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Product,Liked,SubCategory
+from .models import Category,Product,Liked,SubCategory,Attribute, AttributeValue
 from django.db.models import Q
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from .forms import AttributeValueFormSet
 
 class Home(ListView):
     model = Product 
@@ -18,17 +19,22 @@ class Home(ListView):
         
         if q:
             queryset = queryset.filter(
-                Q(title__icontains=q) |
-                Q(category__title__icontains=q) |
-                Q(phone__brand__icontains=q) |
-                Q(phone__model__icontains=q)).distinct()
-        
+                Q(name__icontains=q) |
+                Q(category__name__icontains=q) |
+                Q(subcategory__name__icontains=q)).distinct()
+            
         return queryset
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["categories"] = Category.objects.all()
+        return context
 
 class ProductCreate(LoginRequiredMixin,CreateView):
     login_url = 'users/login'
     redirect_field_name = 'main/ProductCreate.html'
-    success_url = reverse_lazy('main:Home')
+    success_url = reverse_lazy('main:home')
     model = Product
     context_object_name = 'form'
     template_name = 'main/ProductCreate.html'
@@ -36,8 +42,20 @@ class ProductCreate(LoginRequiredMixin,CreateView):
     
     def form_valid(self, form):
         form.instance.author = self.request.user
-        return super().form_valid(form)
-    
+        response = super().form_valid(form)
+
+        for key, value in self.request.POST.items():
+            if key.startswith("attribute_"):
+                attribute_id = key.split("_")[1]
+
+                AttributeValue.objects.create(
+                    product=self.object,
+                    attribute_id=attribute_id,
+                    value=value
+                )
+
+        return response
+        
 
 def load_subcategories(request):
 
@@ -49,6 +67,13 @@ def load_subcategories(request):
 
     return JsonResponse(data, safe=False)
 
+
+def load_attributes(request):
+    subcategory_id = request.GET.get("subcategory")
+    attributes = Attribute.objects.filter(subcategory = subcategory_id)
+    data = list(attributes.values("id","name"))
+    return JsonResponse(data, safe=False)
+    
 
 class MyProducts(LoginRequiredMixin,ListView):
     model = Product
@@ -110,3 +135,26 @@ class ProductLiked(LoginRequiredMixin, ListView):
         qs = qs.filter(user = self.request.user)
         qs = qs.select_related("product")
         return qs
+    
+    
+class DetailCategory(DetailView):
+    model = Category
+    context_object_name = "category"
+    template_name = "main/category.html"
+
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["subcategories"] = SubCategory.objects.filter(category=self.object)
+        return context
+    
+class SubCategoryProducts(DetailView):
+    model = SubCategory
+    context_object_name = "subcategory"
+    template_name = "main/SubCategory_products.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["products"] = Product.objects.filter(subcategory=self.object)
+        return context 
+    
