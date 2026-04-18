@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Category,Product,Liked,SubCategory,Attribute, AttributeValue
-from django.db.models import Q
+from django.db.models import Q, Exists,OuterRef
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .forms import AttributeValueFormSet
@@ -22,7 +22,8 @@ class Home(ListView):
                 Q(name__icontains=q) |
                 Q(category__name__icontains=q) |
                 Q(subcategory__name__icontains=q)).distinct()
-            
+        
+       
         return queryset
     
     def get_context_data(self, **kwargs):
@@ -107,8 +108,9 @@ class ProductDelete(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         return super().get_queryset().filter(author=self.request.user)
     
-@login_required
 def ProductLike(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "auth"}, status=401)
     if request.method == "POST":
         product_pk = request.POST.get('pk')
         product = Product.objects.get(id=product_pk)
@@ -116,6 +118,7 @@ def ProductLike(request):
             user = request.user,
             product = product
         )
+        
         if not created:
             like.delete()
             return JsonResponse({"favorited": False})
@@ -152,9 +155,16 @@ class SubCategoryProducts(DetailView):
     model = SubCategory
     context_object_name = "subcategory"
     template_name = "main/SubCategory_products.html"
-    
+        
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["products"] = Product.objects.filter(subcategory=self.object)
+        products = Product.objects.filter(subcategory=self.object)
+        if self.request.user.is_authenticated:
+            likes = Liked.objects.filter(
+                user = self.request.user,
+                product = OuterRef("pk")
+            )
+            products = products.annotate(is_liked=Exists(likes))
+        context["products"] = products
         return context 
-    
+        

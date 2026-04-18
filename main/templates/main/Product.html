@@ -37,3 +37,51 @@
 
 <script src="{% static 'main/js/like.js' %}"></script>    
 {% endblock section %}
+
+
+апдейт продукт 
+{% extends 'main/base.html' %}
+
+{% block title %}{{ product.name }}{% endblock title %}
+
+{% block section %}
+<section class="product-section">
+    <div class="product-container">
+        <div class="product-image">
+            <!-- Плейсхолдер под фото -->
+            <img src="{% static 'main/images/placeholder.png' %}" alt="{{ product.name }}">
+        </div>
+        <div class="product-info">
+            <h1 class="product-name">{{ product.name }}</h1>
+            
+            <div class="product-meta">
+                <span class="product-price">${{ product.price }}</span>
+                <span class="product-author">Автор: {{ product.author.username }}</span>
+                <span class="product-date">{{ product.created_at|date:"d M Y" }}</span>
+            </div>
+            
+            <div class="product-attributes">
+                <h3>Характеристики</h3>
+                <ul>
+                    {% for attr in product.attributevalue_set.all %}
+                        <li><strong>{{ attr.attribute.name }}:</strong> {{ attr.value }}</li>
+                    {% empty %}
+                        <li>Характеристики не указаны</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            <div class="product-like">
+                <span class="heart" title="Добавить в избранное">❤️</span>
+            </div>
+
+            {% if product.description %}
+            <div class="product-description">
+                <h3>Описание</h3>
+                <p>{{ product.description }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock section %}

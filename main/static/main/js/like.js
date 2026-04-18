@@ -1,22 +1,36 @@
-const like = document.querySelector(".like");
+const likes = document.querySelectorAll(".like");
 
-like.addEventListener("click", function () {
-    let productID = this.dataset.productId;
-    let url = this.dataset.url;
-    fetch(url,{
-        method: "POST",
-        headers: {
-            "X-CSRFToken" : getCookie("csrftoken"),
-            "Content-Type": "application/x-www-form-urlencoded" 
-        },
-        body: "pk=" + productID 
+likes.forEach(like => {
 
-    })
-    .then(res => res.json())
-    .then(data => {
-        this.src = data.favorited ? this.dataset.redHeart : this.dataset.blackHeart;
+    like.addEventListener("click", function () {
+        let productID = this.dataset.productId;
+        let url = this.dataset.url;
+        fetch(url,{
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+                "X-CSRFToken" : getCookie("csrftoken"),
+                "Content-Type": "application/x-www-form-urlencoded" 
+            },
+            body: "pk=" + productID 
+    
+        })
+        .then(res => {
+            if (res.status === 401) {
+                window.location.href = "/users/login/";
+                return null;
+        }
+            return res.json();
+        })
+        .then(data => {
+            if (!data) return;
+    
+            this.src = data.favorited
+                ? this.dataset.redHeart
+                : this.dataset.blackHeart;
+        });
     });
-});
+})
 
 
 
