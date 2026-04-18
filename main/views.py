@@ -167,4 +167,3 @@ class SubCategoryProducts(DetailView):
             products = products.annotate(is_liked=Exists(likes))
         context["products"] = products
         return context 
-        
