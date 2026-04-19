@@ -2,18 +2,21 @@
 {% load static %}
 {% block section %}
 
-    <form method="post">
-    {% csrf_token %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
 
-    {{ form.category }}
+        {{ form.category }}
 
-    {{ form.subcategory }}
+        {{ form.subcategory }}
 
-    {{ form.name }}
+        {{ form.name }}
 
-    <div id="attributes"></div>
+        <div id="attributes"></div>
 
-    {{ form.price }}
+        {{ form.price }}
+
+        <input type="file" name="images" multiple>
+
 
     <button type="submit">Create</button>
     </form> 

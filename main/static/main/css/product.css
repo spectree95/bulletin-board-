@@ -1,89 +1,76 @@
-/* Основная секция */
 .product-section {
-    margin: 30px 100px;
-    display: flex;
-    justify-content: center;
+    margin: 40px 80px;
+    display: grid;
+    grid-template-columns: 2fr 1fr; /* галерея больше */
+    gap: 30px;
+}
+
+.carousel {
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.carousel img {
+    height: 400px;
+    object-fit: cover;
 }
 
 .product-container {
-    display: flex;
-    gap: 40px;
-    max-width: 1000px;
-    width: 100%;
-    background-color: #fff;
-    border-radius: 12px;
+    background: #fff;
+    border-radius: 20px;
     padding: 20px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.08);
 }
 
-/* Фото товара */
-.product-image img {
-    width: 350px;
-    height: 350px;
-    object-fit: cover;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-}
-
-/* Информация о товаре */
-.product-info {
-    flex: 1;
+/* Правая колонка */
+.product-container-right{
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 }
 
-.product-name {
+.product-info h3 {
     font-size: 28px;
-    margin-bottom: 10px;
+    margin: 10px 0;
 }
 
-.product-meta {
+.product-price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2ecc71;
+}
+
+.product-date {
+    color: #888;
     font-size: 14px;
-    color: #666;
-    margin-bottom: 20px;
 }
 
-.product-meta span {
-    margin-right: 15px;
+/* лайк */
+.product-like img {
+    transition: transform 0.2s;
+}
+.product-like img:hover {
+    transform: scale(1.1);
 }
 
-/* Атрибуты */
-.product-attributes h3 {
-    margin-bottom: 10px;
+/* Автор */
+.product-author {
+    grid-column: span 2;
+}
+
+/* Нижний блок */
+.product-details {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
 }
 
 .product-attributes ul {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 20px 0;
+    padding-left: 20px;
 }
 
 .product-attributes li {
-    padding: 5px 0;
-    border-bottom: 1px solid #eee;
+    margin-bottom: 8px;
 }
 
-/* Сердечко лайка */
-.product-like {
-    margin-bottom: 20px;
-}
-
-.heart {
-    font-size: 28px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.heart:hover {
-    transform: scale(1.3);
-}
-
-/* Описание */
-.product-description h3 {
-    margin-bottom: 10px;
-}
-
-.product-description p {
-    line-height: 1.6;
-    color: #333;
-}

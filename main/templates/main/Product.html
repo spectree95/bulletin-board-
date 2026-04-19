@@ -1,87 +1,95 @@
-{% extends "main/base.html" %}
-{% load static %}
-{% block section %}
-    <H1>Информация о продукте</H1>
-    {% if product.author == request.user %}
-        <a href="{% url 'main:ProductUpdate' product.id %}">Изменить</a>
-        <button onclick="openModal()">Delete</button>
-        <div id="deleteModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);">
-    
-            <div style="background:white; padding:20px; width:300px; margin:200px auto; text-align:center;">
-                <p>Ты точно хочешь удалить?</p>
-    
-                <form method="post" action="{% url 'main:ProductDelete' product.id %}">
-                    {% csrf_token %}
-                    <button type="submit">Да, удалить</button>
-                </form>
-    
-                <button onclick="closeModal()">Отмена</button>
-            </div>
-    
-        </div>
-    {% endif %}
-    
-    <img
-        class="like"
-        style="cursor: pointer; height: 50px;width: 50px;"
-        src="{% static 'main/image/black_heart.png' %}" 
-        data-url="{% url 'main:ProductLike' %}"
-        data-product-id="{{product.id}}"
-        data-black-heart="{% static 'main/image/black_heart.png' %}"
-        data-red-heart="{% static 'main/image/red_heart.png' %}"
-        alt=""
-    >
-
-
-
-
-<script src="{% static 'main/js/like.js' %}"></script>    
-{% endblock section %}
-
-
-апдейт продукт 
 {% extends 'main/base.html' %}
-
-{% block title %}{{ product.name }}{% endblock title %}
+{% load static %}
 
 {% block section %}
 <section class="product-section">
-    <div class="product-container">
-        <div class="product-image">
-            <!-- Плейсхолдер под фото -->
-            <img src="{% static 'main/images/placeholder.png' %}" alt="{{ product.name }}">
-        </div>
-        <div class="product-info">
-            <h1 class="product-name">{{ product.name }}</h1>
+
+    <!-- Левая часть (галерея) -->
+    <div id="carouselExampleAutoplaying" class="carousel slide" style="width: 780px;height: 400;" data-bs-ride="carousel">
+        <div class="carousel-inner">
             
-            <div class="product-meta">
-                <span class="product-price">${{ product.price }}</span>
-                <span class="product-author">Автор: {{ product.author.username }}</span>
-                <span class="product-date">{{ product.created_at|date:"d M Y" }}</span>
-            </div>
-            
-            <div class="product-attributes">
-                <h3>Характеристики</h3>
-                <ul>
-                    {% for attr in product.attributevalue_set.all %}
-                        <li><strong>{{ attr.attribute.name }}:</strong> {{ attr.value }}</li>
-                    {% empty %}
-                        <li>Характеристики не указаны</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            
-            <div class="product-like">
-                <span class="heart" title="Добавить в избранное">❤️</span>
+            <div class="carousel-item active">
+                <img  src="{{product.images.first.image.url}}" class="d-block w-100" alt="...">
             </div>
 
-            {% if product.description %}
-            <div class="product-description">
-                <h3>Описание</h3>
-                <p>{{ product.description }}</p>
+            {% for img in product.images.all|slice:"1:" %}
+                <div class="carousel-item"> 
+                    <img src="{{img.image.url}}" class="d-block w-100" alt="...">
+                </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    
+
+    <!-- Правая часть -->
+    <div class="product-container-right">
+
+        <div class="product-container product-info">
+            <div style="display: flex;align-items:center;justify-content: space-between;">
+
+                <span class="product-date">{{ product.created_at|date:"d M Y" }}</span>
+                <img
+                    class="like"
+                    style="cursor: pointer; height: 50px;width: 50px;"
+                    src="
+                        {% if product.is_liked %}
+                            {% static 'main/image/red_heart.png' %}
+                        {% else %}
+                            {% static 'main/image/black_heart.png' %}
+                        {% endif %}"
+                    data-url="{% url 'main:ProductLike' %}"
+                    data-product-id="{{product.id}}"
+                    data-black-heart="{% static 'main/image/black_heart.png' %}"
+                    data-red-heart="{% static 'main/image/red_heart.png' %}"
+                    alt=""
+                >
             </div>
-            {% endif %}
+            <h3>{{product.name}}</h3>
+            <span class="product-price">${{ product.price }}</span>
+        </div>
+     
+            <!-- Автор -->
+        <div class="product-container product-author">
+            <h2>Пользователь</h2>
+            <p>{{product.author}}</p> 
+            <p>{{product.author.phone_number}}</p>       
+        </div>
+    
+    </div>
+
+    <!-- Характеристики + описание -->
+    <div class="product-details">
+        <div class="product-container product-attributes">
+            <h3>Характеристики</h3>
+            <ul>
+                {% for attr in product.attributevalue_set.all %}
+                    <li><strong>{{ attr.attribute.name }}:</strong> {{ attr.value }}</li>
+                {% empty %}
+                    <li>Нет характеристик</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="product-container product-description">
+            <h3>Описание</h3>
+            <p>{{ product.description }}</p>
         </div>
     </div>
+
+   
+
 </section>
+
+<link rel="stylesheet" href="{% static 'main/css/product.css' %}">
+<script src="{% static 'main/js/like.js' %}"></script>    
+
 {% endblock section %}
+

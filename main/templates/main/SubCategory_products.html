@@ -32,7 +32,7 @@
                 >
             </div>
             <div class="product-info">
-                <h4>{{ product.name }}</h4>
+                <a href="{% url 'main:Product' product.id %}"><h4>{{ product.name }}</h4><a>
                 <p class="price">{{ product.price }} ₽</p>
                 <p class="created">Добавлен: {{ product.created_at|date:"d.m.Y H:i" }}</p>
                 <p class="author">Автор: {{ product.author.username }}</p>

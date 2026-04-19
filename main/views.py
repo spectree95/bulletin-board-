@@ -2,7 +2,7 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Category,Product,Liked,SubCategory,Attribute, AttributeValue
+from .models import Category,Product,ProductImage, Liked,SubCategory,Attribute, AttributeValue
 from django.db.models import Q, Exists,OuterRef
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -54,6 +54,13 @@ class ProductCreate(LoginRequiredMixin,CreateView):
                     attribute_id=attribute_id,
                     value=value
                 )
+        images = self.request.FILES.getlist('images')
+        for img in images:
+            ProductImage.objects.create(
+                product = self.object,
+                image = img
+            )
+        
 
         return response
         
@@ -83,6 +90,7 @@ class MyProducts(LoginRequiredMixin,ListView):
     
     def get_queryset(self):
         qs = super().get_queryset()
+        
         qs = qs.filter(author=self.request.user)
         return qs
             
@@ -90,6 +98,17 @@ class ProductDetail(DetailView):
     model = Product
     template_name = 'main/Product.html'
     context_object_name = 'product'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.is_authenticated:
+            likes = Liked.objects.filter(
+                user = self.request.user,
+                product = OuterRef("pk") 
+            )
+            queryset = queryset.annotate(is_liked=Exists(likes))
+        
+        return queryset
 
      
 class ProductUpdate(LoginRequiredMixin,UpdateView):
