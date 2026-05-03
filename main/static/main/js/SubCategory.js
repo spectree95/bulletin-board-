@@ -6,8 +6,16 @@ document.getElementById("id_category").addEventListener("change", function () {
         .then(response => response.json())
         .then(data => {
 
-            let subSelect = document.getElementById("subcategory");
+            let subSelect = document.getElementById("id_subcategory");
             subSelect.innerHTML = "";
+
+            let placeholder = document.createElement("option");
+            placeholder.value = "";
+            placeholder.textContent = "Выберите подкатегорию";
+            placeholder.selected = true;
+            placeholder.hidden = true;
+            subSelect.appendChild(placeholder);
+
 
             data.forEach(function(sub) {
                 let option = document.createElement("option");

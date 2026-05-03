@@ -41,6 +41,11 @@ class ProductCreate(LoginRequiredMixin,CreateView):
     template_name = 'main/ProductCreate.html'
     fields = ['category','name','price','subcategory']
     
+    def get_form(self, form_class = None):
+        form = super().get_form(form_class)
+        form.fields["subcategory"].queryset = SubCategory.objects.none()
+        return form
+    
     def form_valid(self, form):
         form.instance.author = self.request.user
         response = super().form_valid(form)
@@ -63,13 +68,15 @@ class ProductCreate(LoginRequiredMixin,CreateView):
         
 
         return response
+    
+    
         
 
 def load_subcategories(request):
 
-    category_id = request.GET.get("category")
+    category = request.GET.get("category")
 
-    subcategories = SubCategory.objects.filter(category_id=category_id)
+    subcategories = SubCategory.objects.filter(category=category)
 
     data = list(subcategories.values("id", "name"))
 
@@ -77,8 +84,8 @@ def load_subcategories(request):
 
 
 def load_attributes(request):
-    subcategory_id = request.GET.get("subcategory")
-    attributes = Attribute.objects.filter(subcategory = subcategory_id)
+    subcategory = request.GET.get("subcategory")
+    attributes = Attribute.objects.filter(subcategory = subcategory)
     data = list(attributes.values("id","name"))
     return JsonResponse(data, safe=False)
     
