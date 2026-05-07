@@ -1,28 +1,72 @@
 {% extends "main/base.html" %}
 {% load static %}
 {% block section %}
+    <section class="section">
 
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
+        <h2 style="color: #4a6cf7;">Создать объявление</h2>
+        <form class="product-form" action="{% url 'main:ProductCreate' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="product-container product-detail">
+                <h4 style="font-size: 23px;">Опишите в подробностях</h4>
+                <input 
+                    type="text" 
+                    name="name" 
+                    id="id_name"
+                    class="input-field"
+                    placeholder="Дайте краткое описание товара"
+                    style="width: 700px; padding-left: 10px;border: 1.5px solid gray;border-radius: 3px;"
+                >
+                <div class="form-category">
+                    <select name="category" id="id_category">
+                        <option value="" selected hidden>Выберите категорию</option>
+                        {% for categ in category %}
+                            <option value="{{categ.id}}">{{categ.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-category">{{ form.subcategory }}</div>
+            </div>
+    
+            <div class="product-container">
+                <h4 style="font-size: 23px;">Фото</h4>
+                <input type="file" name="images" multiple style="border-radius: 3px;">
+            </div>
+    
+            <div class="product-container">
+                <h4 style="font-size: 23px;">Описание </h4>
+                <textarea 
+                    type="text"
+                    name="description"
+                    id="id_description"    
+                    style="width: 700px;height: 150px; padding-left: 10px;border: 1.5px solid gray;border-radius: 3px;"
+                    placeholder="Напишите о деталях вашего продукта"
+                ></textarea>
+            </div>
+    
+            <div class="product-container">
+                <h4 style="font-size: 23px;">Цена</h4>
+                <div class="input-wrapper">
+                    <input type="number" name="price" id="id_price" placeholder="0.00" >
+                    <span class="currency">тг.</span>
+                </div>
+            </div>
+    
+            <div class="product-container additional-information">
+                <h4 style="font-size: 23px;">Дополнительная информация</h4>
+                <div class="attributes" id="attributes"></div>
+            </div>
+    
+            
+    
 
-        {{ form.category }}
-
-        {{ form.subcategory }}
-
-        {{ form.name }}
-
-        <div id="attributes"></div>
-
-        {{ form.price }}
-
-        <input type="file" name="images" multiple>
-
-
-    <button type="submit">Create</button>
-    </form> 
-
-    <link rel="stylesheet" href="{% static 'main/css/ProductCreate.css' %}">
-    <script src="{% static 'main/js/SubCategory.js' %}"></script>
-    <script src="{% static 'main/js/attributes.js' %}"></script>
+            <div style="display: flex; justify-content: flex-end;">
+                <button class="create_btn" type="submit">Опубликовать</button>
+            </div>
+        </form> 
+    
+        <link rel="stylesheet" href="{% static 'main/css/ProductCreate.css' %}">
+        <script src="{% static 'main/js/SubCategory.js' %}"></script>
+        <script src="{% static 'main/js/attributes.js' %}"></script>
+    </section>
 {% endblock section %}
 

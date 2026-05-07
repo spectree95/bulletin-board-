@@ -1,7 +1,90 @@
+
 select.placeholder {
     color: gray;
 }
 
 select.filled {
     color: black;
+}
+
+
+
+.product-container {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    margin-bottom: 10px;
+}
+
+
+.product-detail{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+    
+}
+
+.form-category{
+    width: 250px;
+    
+}
+
+.form-category select{
+    width: 100%;
+    border-radius: 3px;
+}
+
+
+.attributes input{
+    border: 1.5px solid gray;
+    border-radius: 3px;
+}
+
+
+.additional-information{
+    display: none;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.create_btn {
+    background: #4a6cf7;
+    border: none;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 19px;
+}
+
+.create_btn:hover {
+    background: #3a59d9;
+}
+
+
+.input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid gray; /* Тот самый зеленый цвет с вашего скрина */
+  border-radius: 3px;
+  padding: 8px 12px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.input-wrapper input {
+  border: none;       /* Убираем родную рамку */
+  outline: none;      /* Убираем подсветку при клике */
+  flex-grow: 1;       /* Инпут забирает всё свободное место */
+  font-size: 16px;
+}
+
+.currency {
+  color: #333;
+  margin-left: 8px;
+  font-size: 14px;
+  user-select: none;  /* Чтобы текст «тг.» нельзя было выделить курсором */
 }

@@ -4,15 +4,25 @@
     grid-template-columns: 2fr 1fr; /* галерея больше */
     gap: 30px;
 }
-
 .carousel {
     border-radius: 20px;
     overflow: hidden;
+    height: 500px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.carousel-item {
+    height: 500px;
 }
 
 .carousel img {
-    height: 400px;
-    object-fit: cover;
+    width: 95%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
 }
 
 .product-container {
@@ -72,5 +82,11 @@
 
 .product-attributes li {
     margin-bottom: 8px;
+}
+
+
+.user{
+    display: flex;
+    flex-direction: row;
 }
 

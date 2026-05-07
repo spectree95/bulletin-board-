@@ -33,6 +33,8 @@
     <div class="product-container-right">
 
         <div class="product-container product-info">
+            <h3>{{product.name}}</h3>
+            <span class="product-price">${{ product.price }}</span>
             <div style="display: flex;align-items:center;justify-content: space-between;">
 
                 <span class="product-date">{{ product.created_at|date:"d M Y" }}</span>
@@ -52,15 +54,21 @@
                     alt=""
                 >
             </div>
-            <h3>{{product.name}}</h3>
-            <span class="product-price">${{ product.price }}</span>
         </div>
      
             <!-- Автор -->
         <div class="product-container product-author">
-            <h2>Пользователь</h2>
-            <p>{{product.author}}</p> 
-            <p>{{product.author.phone_number}}</p>       
+            <h2>Владелец</h2>
+            <div class="user">
+                <div>
+                    <img src="{% static 'main/image/user.png' %}" style="height: 70px;" alt="123">
+                </div>
+                <div>
+                    <p style="padding-top: 10px;">{{product.author}}</p> 
+                    <p>{{product.author.phone_number}}</p>       
+                </div>
+            </div>
+            <button type="submit">Написать Сообщение</button>
         </div>
     
     </div>

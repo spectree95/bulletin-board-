@@ -57,6 +57,10 @@ section {
     text-decoration: none;
 }
 
+.create-btn:hover {
+    background: #3a59d9;
+}
+
 .custom-dropdown {
     border-radius: 12px;
     padding: 10px;

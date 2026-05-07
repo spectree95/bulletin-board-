@@ -39,12 +39,23 @@ class ProductCreate(LoginRequiredMixin,CreateView):
     model = Product
     context_object_name = 'form'
     template_name = 'main/ProductCreate.html'
-    fields = ['category','name','price','subcategory']
+    fields = ['category','name','price','subcategory','description']
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["category"] = Category.objects.all()
+        return context
     
     def get_form(self, form_class = None):
         form = super().get_form(form_class)
-        form.fields["subcategory"].queryset = SubCategory.objects.none()
+        category = self.request.POST.get("category")
+        if category:
+            form.fields["subcategory"].queryset = SubCategory.objects.filter(category=category)
+        else:    
+            form.fields["subcategory"].queryset = SubCategory.objects.none()
+        
         return form
+    
     
     def form_valid(self, form):
         form.instance.author = self.request.user
@@ -68,6 +79,10 @@ class ProductCreate(LoginRequiredMixin,CreateView):
         
 
         return response
+    
+    def form_invalid(self, form):
+        print(form.errors)
+        return super().form_invalid(form)
     
     
         

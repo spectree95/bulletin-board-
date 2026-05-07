@@ -100,3 +100,8 @@
         text-align: center;
     }
 }
+
+
+.user{
+    display: flex;
+}
