@@ -45,9 +45,8 @@
 }
 
 .product-price {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
-    color: #2ecc71;
 }
 
 .product-date {
@@ -74,7 +73,9 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 30px;
+    align-items: flex-start;
 }
+
 
 .product-attributes ul {
     padding-left: 20px;
@@ -89,4 +90,25 @@
     display: flex;
     flex-direction: row;
 }
+
+
+.write-btn {
+    background: #242424;
+    border: none;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 16px;
+    text-decoration: none;
+}
+
+.write-btn:hover {
+    background: #3e3e3e;
+}
+
+
+
+
 

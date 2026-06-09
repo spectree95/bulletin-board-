@@ -2,10 +2,23 @@ const subcategorySelect = document.getElementById("id_subcategory");
 const attributesContainer = document.getElementById("attributes");
 let additionalInformation = document.querySelector(".additional-information")
 
-subcategorySelect.addEventListener("change", function () {
-    const subcategoryId = this.value;
+const attributeScript = document.getElementById("attribute-values");
 
-    fetch(`ajax/load-attributes/?subcategory=${subcategoryId}`)
+const attributeValues = attributeScript
+    ? JSON.parse(attributeScript.textContent)
+    : {};
+
+
+function loadattributes(){
+    const subcategoryId = subcategorySelect.value
+
+    if (!subcategoryId){
+        additionalInformation.style.display = "none";
+        attributesContainer.innerHTML = "";
+        return;
+    }
+    additionalInformation.style.display = "flex";
+    fetch(`/ajax/load-attributes/?subcategory=${subcategoryId}`)
         
         .then(response => response.json())
         .then(data => {
@@ -21,6 +34,9 @@ subcategorySelect.addEventListener("change", function () {
                 const input = document.createElement("input");
                 input.type = "text";
                 input.name = `attribute_${attr.id}`;
+                if (attributeValues[attr.id]){
+                    input.value = attributeValues[attr.id]
+                }
                 input.placeholder = attr.name;
                 input.style.border = "1.5px solid gray"
                 input.style.borderRadius = "3px"
@@ -33,9 +49,11 @@ subcategorySelect.addEventListener("change", function () {
             });
                     
         });
-    if (subcategoryId){
-        additionalInformation.style.display = "flex";
-    }else{
-        additionalInformation.style.display = "none";
-    } 
-});
+}
+
+
+subcategorySelect.addEventListener("change", loadattributes);
+
+loadattributes();
+    
+   

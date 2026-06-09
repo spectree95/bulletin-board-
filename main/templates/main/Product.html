@@ -34,7 +34,7 @@
 
         <div class="product-container product-info">
             <h3>{{product.name}}</h3>
-            <span class="product-price">${{ product.price }}</span>
+            <span class="product-price">{{ product.price }} ₸</span>
             <div style="display: flex;align-items:center;justify-content: space-between;">
 
                 <span class="product-date">{{ product.created_at|date:"d M Y" }}</span>
@@ -59,23 +59,30 @@
             <!-- Автор -->
         <div class="product-container product-author">
             <h2>Владелец</h2>
-            <div class="user">
+            <div class="user" style="padding-top: 10px;padding-bottom: 10px;"> 
                 <div>
-                    <img src="{% static 'main/image/user.png' %}" style="height: 70px;" alt="123">
+                    <img src="{% static 'main/image/user-logo.png' %}" style="height: 80px;" alt="123">
                 </div>
-                <div>
-                    <p style="padding-top: 10px;">{{product.author}}</p> 
-                    <p>{{product.author.phone_number}}</p>       
-                </div>
+                <div style="margin-left: 5px;">
+                    <p style="font: bold;font-size: 17px;">{{product.author}}</p>
+                    <div>
+                        <p class="product-date" style="margin-bottom: 0;">Контакты продавца</p>
+                        <p style="margin-top: 0;">{{product.author.phone_number}}</p>       
+                    </div>
+                </div> 
             </div>
-            <button type="submit">Написать Сообщение</button>
+            {% if user == product.author %}
+                <a href="{% url 'main:ProductUpdate' pk=product.id %}" class="write-btn" style="display:flex;justify-content: center;">Изменить продукт</a>
+            {% else %}
+                <a href="#" class="write-btn" style="display:flex;justify-content: center;">Написать Сообщение</a>
+            {% endif %}
         </div>
     
     </div>
 
     <!-- Характеристики + описание -->
     <div class="product-details">
-        <div class="product-container product-attributes">
+        <div class="product-container product-attributes" >
             <h3>Характеристики</h3>
             <ul>
                 {% for attr in product.attributevalue_set.all %}
@@ -86,7 +93,7 @@
             </ul>
         </div>
 
-        <div class="product-container product-description">
+        <div class="product-container product-description" style="width: 780px;">
             <h3>Описание</h3>
             <p>{{ product.description }}</p>
         </div>

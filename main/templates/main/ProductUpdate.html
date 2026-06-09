@@ -1,13 +1,92 @@
 {% extends "main/base.html" %}
-
+{% load static %}
+{% load dict_extras %}
 {% block section %}
+    <section class="section">
 
-    <form action="" method="post">
-        {% csrf_token %}
-        {{form.as_p}}
-        <button type="submit">Изменить</button>
-    </form>
+        <h2 style="color: #4a6cf7;">Изменить объявление</h2>
+        <form class="product-form" action="{% url 'main:ProductUpdate' pk=product.id %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="product-container product-detail">
+                <h4 style="font-size: 25px;">Опишите в подробностях</h4>
+                <input 
+                    type="text" 
+                    name="name" 
+                    id="id_name"
+                    value="{{form.name.value}}"
+                    class="input-field"
+                    placeholder="Дайте краткое описание товара"
+                    style="width: 700px; padding-left: 10px;border: 1.5px solid gray;border-radius: 3px;"
+                >
+                <div class="form-category">
+                    <select name="category" id="id_category">
+                        <option value="{{object.category.id}}" selected>{{object.category.name}}</option>
+                        {% for categ in category %}
+                            <option value="{{categ.id}}">{{categ.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-category">{{ form.subcategory }}</div>
+            </div>
+    
+            <div class="product-container">
+                <h4 style="font-size: 25px;">Фото</h4>
+                <h5 style="font-size: 14px;">Текущие фотографии</h5>
 
+                {% for image in object.images.all %}
+                    <img src="{{image.image.url}}" style="width: 150px;" alt="">
+
+                    <label>
+                        <input type="checkbox"
+                        name="delete_images"
+                        value="{{ image.id }}">
+                    </label>
+
+                {% endfor %}
+                <h5 style="font-size: 11px; color: gray;">Выберите фотографии, которые хотите удалить</h5>
+
+
+                <h5 style="font-size: 14px;">Добавить новые фотографии</h5>
+                <input type="file" name="images" value="{{object.images}}" multiple style="border-radius: 3px;">
+            </div>
+    
+            <div class="product-container">
+                <h4 style="font-size: 25px;">Описание </h4>
+                <textarea 
+                    type="text"
+                    name="description"
+                    id="id_description"    
+                    style="width: 700px;height: 150px; padding-left: 10px;border: 1.5px solid gray;border-radius: 3px;"
+                    placeholder="Напишите о деталях вашего продукта"
+                >{{object.description}}</textarea>
+            </div>
+    
+            <div class="product-container">
+                <h4 style="font-size: 25px;">Цена</h4>
+                <div class="input-wrapper">
+                    <input type="number" name="price" id="id_price" value="{{form.price.value}}" placeholder="0.00" >
+                    <span class="currency">тг.</span>
+                </div>
+            </div>
+    
+            <div class="product-container additional-information" data-attributes="{{attributes.set.all}}">
+                <h4 style="font-size: 25px;">Дополнительная информация</h4>
+                <div class="attributes" id="attributes">
+                    {{attribute_values|json_script:"attribute-values"}}
+                </div>
+            </div>
+    
+            
+    
+
+            <div style="display: flex; justify-content: flex-end;">
+                <button class="create_btn" type="submit">Изменить</button>
+            </div>
+        </form> 
+    
+        <link rel="stylesheet" href="{% static 'main/css/ProductCreate.css' %}">
+        <script src="{% static 'main/js/SubCategory.js' %}"></script>
+        <script src="{% static 'main/js/attributes.js' %}"></script>
+    </section>
 {% endblock section %}
-
 

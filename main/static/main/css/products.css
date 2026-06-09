@@ -31,9 +31,10 @@
     align-items: center;
 }
 
-.product-image .placeholder {
-    color: #aaa;
-    font-size: 14px;
+.product-photo{
+    width:100%;
+    height:100%;
+    object-fit:cover;
 }
 
 /* Сердечко лайка */
@@ -101,7 +102,3 @@
     }
 }
 
-
-.user{
-    display: flex;
-}

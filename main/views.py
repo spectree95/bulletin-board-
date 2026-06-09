@@ -135,12 +135,63 @@ class ProductDetail(DetailView):
      
 class ProductUpdate(LoginRequiredMixin,UpdateView):
     model = Product
-    fields = ['category', 'title', 'price']
+    fields = ['category','name','price','subcategory','description']
     template_name = 'main/ProductUpdate.html'
     success_url = reverse_lazy('main:home')
+    
     def get_queryset(self):
         return super().get_queryset().filter(author=self.request.user)
-     
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["category"] = Category.objects.all()
+        context["attributes"] = Attribute.objects.filter(subcategory=self.object.subcategory)
+        
+        attribute_values = {
+            av.attribute_id : av.value
+            for av in self.object.attributevalue_set.all()
+        }
+        
+        context["attribute_values"] = attribute_values
+        
+        return context
+    
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        
+        AttributeValue.objects.filter(product=self.object).delete()
+        
+        for key, value in self.request.POST.items():
+            if key.startswith("attribute_"):
+                
+                attribute_id = key.split("_")[1]
+                AttributeValue.objects.update_or_create(
+                    product = self.object, 
+                    attribute_id = attribute_id,
+                    defaults = {
+                        "value":value
+                    }
+                )
+        
+        for img in self.request.POST.getlist("delete_images"):
+            ProductImage.objects.filter(
+                product = self.object,
+                id = img
+            ).delete()
+            
+            
+        
+        images = self.request.FILES.getlist("images")
+        for img in images:
+            ProductImage.objects.create(
+                image = img,
+                product = self.object
+            )
+        
+        return response
+        
+        
+            
 
 class ProductDelete(LoginRequiredMixin, DeleteView):
     model = Product
