@@ -28,8 +28,12 @@ function loadattributes(){
             data.forEach(attr => {
                 const div = document.createElement("div");
 
-                const label = document.createElement("label");
-                
+                div.style.padding = "0";
+
+                const name = document.createElement("h5");
+                name.style.fontSize = "14px"
+                name.type = "text";
+                name.textContent = attr.name;
 
                 const input = document.createElement("input");
                 input.type = "text";
@@ -37,12 +41,11 @@ function loadattributes(){
                 if (attributeValues[attr.id]){
                     input.value = attributeValues[attr.id]
                 }
-                input.placeholder = attr.name;
                 input.style.border = "1.5px solid gray"
                 input.style.borderRadius = "3px"
                 input.style.marginBottom = "10px"
                 input.style.paddingLeft = "10px"
-                div.appendChild(label);
+                div.appendChild(name);
                 div.appendChild(input);
 
                 attributesContainer.appendChild(div);

@@ -1,12 +1,38 @@
 {% extends "main/base.html" %}
+{% load static %}
 
 {% block section %}
+<section style="margin: 30px 100px;">
+    <h2 style="text-align:center; margin-bottom: 25px;">Избранные объявления</h2>
 
-    {% for like in likes %}
-        <p>{{like.product.title}}</p>
-        <p>{{like.product.price}}</p>
+    <div class="product-list">
+        {% for like in likes %}
+            <div class="product-card">
+                <div class="product-image">
+                    <div>
+                        <img  class="product-photo" src="{{like.product.images.first.image.url}}" alt="123">
+                    </div>
+                    
+                </div>
+                <div class="product-info">
+                    <a href="{% url 'main:Product' like.product.id %}"><h4>{{ like.product.name }}</h4></a>
+                    <p class="price">{{ like.product.price }} ₸</p>
+                    <p class="created">Добавлен: {{ like.product.created_at|date:"d.m.Y H:i" }}</p>
+                    <p class="author">Автор: {{ like.product.author.username }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <h6 style="display: flex;align-items: center;justify-content: center;">Поставьте лайк на понравившиеся объявления, чтобы увидеть их здесь.</h6>
+
         {% endfor %}
+        
+    </div>
+</section>
+<link rel="stylesheet" href="{% static 'main/css/products.css' %}">
 
 {% endblock section %}
+
+
+
 
 

@@ -3,22 +3,32 @@
 {% load dict_extras %}
 {% block section %}
     <section class="section">
-
-        <h2 style="color: #4a6cf7;">Изменить объявление</h2>
+        <div style="display: flex;justify-content: space-between;">
+            <h2 style="color: #4a6cf7;">Изменить объявление</h2>
+            <form method="post" action="{% url 'main:ProductDelete' pk=product.id %}" onsubmit="return confirm('Вы уверены, что хотите удалить объявление?');">
+                {% csrf_token %}
+                <button type="submit" class="delete_btn">Удалить объявление</button>
+            </form>
+        </div>
         <form class="product-form" action="{% url 'main:ProductUpdate' pk=product.id %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="product-container product-detail">
                 <h4 style="font-size: 25px;">Опишите в подробностях</h4>
-                <input 
-                    type="text" 
-                    name="name" 
-                    id="id_name"
-                    value="{{form.name.value}}"
-                    class="input-field"
-                    placeholder="Дайте краткое описание товара"
-                    style="width: 700px; padding-left: 10px;border: 1.5px solid gray;border-radius: 3px;"
-                >
+                <div>
+                    <h5 style="font-size: 14px;padding: 0;">Название вашего продукта</h5>
+                    <input 
+                        type="text" 
+                        name="name" 
+                        id="id_name"
+                        value="{{form.name.value}}"
+                        class="input-field"
+                        placeholder="Дайте краткое описание товара"
+                        style="width: 700px; padding-left: 10px;border: 1.5px solid gray;border-radius: 3px;"
+                    >
+                </div>
+
                 <div class="form-category">
+                    <h5 style="font-size: 14px;padding: 0;">Категория</h5>
                     <select name="category" id="id_category">
                         <option value="{{object.category.id}}" selected>{{object.category.name}}</option>
                         {% for categ in category %}
@@ -26,24 +36,31 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="form-category">{{ form.subcategory }}</div>
+                <div class="form-category">
+                    <h5 style="font-size: 14px;padding: 0;">Подкатегория</h5>
+                    {{ form.subcategory }}
+                </div>
             </div>
     
             <div class="product-container">
                 <h4 style="font-size: 25px;">Фото</h4>
-                <h5 style="font-size: 14px;">Текущие фотографии</h5>
+                
+                {% if object.images.all %}
+                    <h5 style="font-size: 14px;">Текущие фотографии</h5>
+                
+                    {% for image in object.images.all %}
+                        <img src="{{image.image.url}}" style="width: 150px;" alt="">
 
-                {% for image in object.images.all %}
-                    <img src="{{image.image.url}}" style="width: 150px;" alt="">
-
-                    <label>
-                        <input type="checkbox"
-                        name="delete_images"
-                        value="{{ image.id }}">
-                    </label>
-
-                {% endfor %}
-                <h5 style="font-size: 11px; color: gray;">Выберите фотографии, которые хотите удалить</h5>
+                        <label>
+                            <input type="checkbox"
+                            name="delete_images"
+                            value="{{ image.id }}">
+                        </label>
+                    {% endfor %}
+                    <h5 style="font-size: 11px; color: gray;">Выберите фотографии, которые хотите удалить</h5>
+                
+                {% endif %}
+                
 
 
                 <h5 style="font-size: 14px;">Добавить новые фотографии</h5>

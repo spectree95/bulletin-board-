@@ -6,31 +6,37 @@ from .models import Category,Product,ProductImage, Liked,SubCategory,Attribute, 
 from django.db.models import Q, Exists,OuterRef
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
-from .forms import AttributeValueFormSet
 
 class Home(ListView):
-    model = Product 
-    context_object_name = 'products'
+    model = Category 
+    context_object_name = 'categories'
     template_name = 'main/base.html'
+
+
+class Search_view(ListView):
+    model = Product
+    context_object_name = "products"
+    template_name = "main/Search.html"
     
     def get_queryset(self):
-        queryset = super().get_queryset()
-        q = self.request.GET.get('q')
+        queryset =  super().get_queryset()
+        q = self.request.GET .get("q", '').strip()
         
         if q:
             queryset = queryset.filter(
                 Q(name__icontains=q) |
                 Q(category__name__icontains=q) |
-                Q(subcategory__name__icontains=q)).distinct()
+                Q(subcategory__name__icontains=q)
+            ).distinct()
+            queryset = annotate_likes(queryset, self.request.user)
         
-       
+        else:
+            queryset = queryset.none()    
+        
         return queryset
     
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+            
 
-        context["categories"] = Category.objects.all()
-        return context
 
 class ProductCreate(LoginRequiredMixin,CreateView):
     login_url = 'users/login'
@@ -114,7 +120,9 @@ class MyProducts(LoginRequiredMixin,ListView):
         qs = super().get_queryset()
         
         qs = qs.filter(author=self.request.user)
+        qs = annotate_likes(qs, self.request.user)
         return qs
+
             
 class ProductDetail(DetailView):
     model = Product
@@ -195,7 +203,7 @@ class ProductUpdate(LoginRequiredMixin,UpdateView):
 
 class ProductDelete(LoginRequiredMixin, DeleteView):
     model = Product
-    template_name = 'main/Product.html'
+    template_name = 'main/ProductUpdate.html'
     success_url = reverse_lazy('main:home')
     def get_queryset(self):
         return super().get_queryset().filter(author=self.request.user)
@@ -231,17 +239,19 @@ class ProductLiked(LoginRequiredMixin, ListView):
         qs = qs.select_related("product")
         return qs
     
+
+    
     
 class DetailCategory(DetailView):
     model = Category
     context_object_name = "category"
-    template_name = "main/category.html"
-
+    template_name = "main/Category.html"
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["subcategories"] = SubCategory.objects.filter(category=self.object)
         return context
+    
     
 class SubCategoryProducts(DetailView):
     model = SubCategory
@@ -251,12 +261,18 @@ class SubCategoryProducts(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         products = Product.objects.filter(subcategory=self.object)
-        if self.request.user.is_authenticated:
-            likes = Liked.objects.filter(
-                user = self.request.user,
-                product = OuterRef("pk")
-            )
-            products = products.annotate(is_liked=Exists(likes))
+        products = annotate_likes(products, self.request.user)
         context["products"] = products
         return context 
         
+def annotate_likes(products,user):
+    if user.is_authenticated:
+        likes = Liked.objects.filter(
+                user = user,
+                product = OuterRef("pk") 
+            )
+        return products.annotate(
+            is_liked = Exists(likes)
+        )
+    
+    

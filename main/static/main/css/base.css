@@ -190,6 +190,8 @@ section {
     box-shadow: 0 0 0 3px rgba(74,108,247,0.15);
 }
 
+
+
 /* Сетка категорий */
 .category-grid {
     display: grid;
@@ -271,3 +273,6 @@ section {
     margin-top: 5px;
     text-decoration: none;
 }
+
+
+

@@ -65,6 +65,26 @@ select.filled {
 }
 
 
+
+
+.delete_btn {
+    background: red;
+    border: none;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 17px;
+    width: 200px;
+    margin-bottom: 10px;
+}
+
+.delete_btn:hover {
+    background: #fa4545;
+}
+
+
 .input-wrapper {
   display: flex;
   align-items: center;
