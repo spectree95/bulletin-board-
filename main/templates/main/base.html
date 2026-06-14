@@ -34,7 +34,7 @@
                 </form>
 
                 <div class="nav-right">
-                    <a href="#" class="chat-link">💬 Чат</a>
+                    <a href="{% url 'realtime:Messenger' %}" class="chat-link">💬 Чат</a>
 
                     {% if user.is_authenticated %}
                         <div class="dropdown user-dropdown">

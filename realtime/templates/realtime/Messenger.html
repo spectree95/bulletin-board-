@@ -1,0 +1,94 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block section %}
+
+    <div class="container-fluid" style="padding: 0;margin: 0;">
+        <div class="row g-0">
+            <div class="col-lg-2">qwertyu</div>
+
+
+            <div class="col-lg-10">
+                <div class="messenger-wrapper">
+                    <div class="row g-0">        
+                        <div class="col-lg-4" style="background-color:white;min-height: 100vh;border-right: 1px solid rgba(255, 255, 255, 0.2);">
+                            <div class="nav" style="border-bottom: 1px solid #d6d6d6;display: flex; height: 70px;gap: 10px; align-items: center;">
+                                <a id="btn-menu" class="btn-menu">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </a>
+                                <p style="font-size: 21px;margin: 0;line-height: 1;">Сообщения</p>
+          
+                            </div>
+                            
+                            <div style="">
+                                {% for room in rooms %}
+                                    <a href="#" class="chat_item" 
+                                        data-room="{{room.id}}"
+                                        data-user-a="{{room.user_a.username}}" 
+                                        data-user-b="{{room.user_b.username}}" 
+                                        data-product-img="{{room.product.images.first.image.url}}"
+                                        style="text-decoration: none;"> 
+                        
+                                        <div class="chats">
+                                            <img src="{{room.product.images.first.image.url}}" style="width: 90px;height: 65px;object-fit:inherit;border-radius: 10px;" alt="">
+                                            <div style="display: flex;flex-direction:column;justify-content: space-between;">
+                                                <p id="chat-username" style="color: #000000;font-weight: bold;">
+                                                    {% if room.user_a != request.user %}
+                                                        {{room.user_a}}
+                                                    {% else %}
+                                                        {{room.user_b}}
+                                                    {% endif %}
+                 
+                                                </p>
+  
+                                                <p id="chat-{{room.id}}-p" class="chat-p" style="color: #787878ff;">{{room.last_message.text}}</p>
+                                            </div>
+                                        </div>
+
+                    
+                    
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-8">
+                
+                            <div class="nav" style="border-left: 1px solid #d6d6d6;height: 70px;gap: 20px; align-items: center;">
+                                <img id="chat-img" style="display: none; margin-left: 20px; width: 70px;height: 50px;object-fit:inherit;border-radius: 5px;" alt="">
+                                <p id="chat-header" style="font-size: 18px;margin: 0;"></p>
+                            </div>
+                
+                            <div style="border: 1px solid #d6d6d6;" id="chat-container">
+          
+                                <div id="chat-messages" class="chattg-messages">
+                                    <div class="messages">
+                                        {% for msg in msgs %}
+                                            {{msg.created}}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                            </div>
+            
+                            <div id="chat-input-container" class="chat-input-container" style="display: none;border-left: 1px solid #d6d6d6;border-left: 1px solid #d6d6d6;">
+                                <input 
+                                    data-current-user-id="{{request.user.username}}"
+                                    data-product="{{room.last_message.product}}"
+                                    type="text"
+                                    style="height: 50px;border-radius: 30px;padding-left: 10px;align-items: center;background: #f1f1f1;" placeholder="Напишите сообщение..."
+                                    id="chat-input">
+                                <button class="chat-tg-btn" style="color: white;" type="submit" id="message-send">➤</button>
+                            </div>
+                        </div>    
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <script src="{% static 'realtime/js/Messenger.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'realtime/css/Messenger.css' %}">
+{% endblock section %}
+

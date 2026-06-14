@@ -264,7 +264,7 @@ class SubCategoryProducts(DetailView):
         products = annotate_likes(products, self.request.user)
         context["products"] = products
         return context 
-<<<<<<< HEAD
+
         
 def annotate_likes(products,user):
     if user.is_authenticated:
@@ -276,10 +276,4 @@ def annotate_likes(products,user):
             is_liked = Exists(likes)
         )
     
-    
-=======
-
-
-def demo(request):
-    pass
->>>>>>> demo
+ 

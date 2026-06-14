@@ -1,0 +1,48 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block section %}
+
+<div class="chat-author">
+
+    <!-- Header -->
+    <div class="chat_nav">
+        <img src="{{product.images.first.image.url}}" alt="">
+        <div class="chat_info">
+            <h3>{{product.author.username}}</h3>
+            <span>Онлайн</span>
+        </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="messages" id="messages">
+        {% for msg in messages %}
+            <div class="message {% if msg.sender.username == request.user.username %}my-message{% else %}other-message{% endif %}">
+                {{msg.text}}
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Input -->
+    <div class="chat_input_container_owner">
+        <input
+            data-product-id="{{product.id}}"
+            data-product-author-id="{{product.author.id}}"
+            data-current-user-id="{{request.user.username}}"
+            type="text"
+            placeholder="Напишите сообщение..."
+            id="chat_input">
+
+        <button id="message-send">
+            ➤
+        </button>
+    </div>
+</div>
+
+
+
+    <script src="{% static 'realtime/js/chat_author.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'realtime/css/chat_author.css' %}">
+{% endblock section %}
+
+
+

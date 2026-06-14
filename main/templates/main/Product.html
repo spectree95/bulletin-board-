@@ -75,7 +75,7 @@
             {% if user == product.author %}
                 <a href="{% url 'main:ProductUpdate' pk=product.id %}" class="write-btn" style="display:flex;justify-content: center;">Изменить продукт</a>
             {% else %}
-                <a href="#" class="write-btn" style="display:flex;justify-content: center;">Написать Сообщение</a>
+                <a href="{% url 'realtime:chat_author' product.id %}" class="write-btn" style="display:flex;justify-content: center;">Написать Сообщение</a>
             {% endif %}
         </div>
     
