@@ -84,25 +84,26 @@ WSGI_APPLICATION = 'bulletin_board.wsgi.application'
 
 
 ASGI_APPLICATION = 'bulletin_board.asgi.application'
+REDIS_URL = os.environ.get("REDIS_URL")
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [os.environ.get("REDIS_URL")],
+            "hosts": [REDIS_URL] if REDIS_URL else [],
         },
     },
 }
-
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get("DATABASE_URL")
+    "default": dj_database_url.config(
+        default="sqlite:///db.sqlite3",
+        conn_max_age=600,
     )
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
