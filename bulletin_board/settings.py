@@ -61,7 +61,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-
+CSRF_TRUSTED_ORIGINS = [
+    'https://bulletin-board-ftyh.onrender.com',
+]
 
 ROOT_URLCONF = 'bulletin_board.urls'
 
