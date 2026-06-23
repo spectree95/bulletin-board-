@@ -28,8 +28,8 @@ class Search_view(ListView):
                 Q(category__name__icontains=q) |
                 Q(subcategory__name__icontains=q)
             ).distinct()
-            queryset = annotate_likes(queryset, self.request.user)
-        
+            if self.request.user.is_authenticated:
+                queryset = annotate_likes(queryset, self.request.user)
         else:
             queryset = queryset.none()    
         
@@ -261,7 +261,8 @@ class SubCategoryProducts(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         products = Product.objects.filter(subcategory=self.object)
-        products = annotate_likes(products, self.request.user)
+        if self.request.user.is_authenticated:
+            products = annotate_likes(products, self.request.user)
         context["products"] = products
         return context 
 

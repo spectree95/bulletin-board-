@@ -21,11 +21,15 @@ document.querySelectorAll(".chat_item").forEach(el => {
         document.querySelectorAll(".chat-p").forEach(p => {
             p.style.color = "#787878ff";
         })
+        document.querySelectorAll(`.chat-username`).forEach(p =>{
+            p.style.color = "black"
+        })
 
 
         el.querySelector(".chats").style.backgroundColor = "#4a6cf7";
         document.getElementById(`chat-${room}-p`).style.color = "#f1f1f1";
-        document.getElementById(`chat-username`).style.color = "#f1f1f1";
+        el.querySelector(`.chat-username`).style.color = "#f1f1f1";
+        
         const chatHeader = document.getElementById("chat-header");
         chatHeader.textContent = (userA===currentUserId) ? userB : userA;
 

@@ -34,7 +34,6 @@
                 </form>
 
                 <div class="nav-right">
-                    <a href="{% url 'realtime:Messenger' %}" class="chat-link">💬 Чат</a>
 
                     {% if user.is_authenticated %}
                         <div class="dropdown user-dropdown">
@@ -52,6 +51,12 @@
                             <li>
                                 <a href="{% url 'main:ProductLiked' %}" class="dropdown-item-custom">
                                      Избранные
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'realtime:Messenger' %}" class="dropdown-item-custom">
+                                    Сообщения
                                 </a>
                             </li>
 

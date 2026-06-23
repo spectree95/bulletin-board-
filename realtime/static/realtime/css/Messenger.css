@@ -13,12 +13,13 @@
 
 .chat_item{
     display:block;
-    padding:10px;
+    padding: 5px;
+    
     transition:.2s;
 }
 
 .chat_item:hover .chats{
-    background: white;
+    background: rgb(237, 237, 237);
 }
 
 .chats{
@@ -28,6 +29,7 @@
     border-radius:12px;
     cursor:pointer;
     transition:.2s;
+    align-items: center;
 }
 
 .chats img{
@@ -78,8 +80,8 @@
     margin:20px auto;
     padding:6px 14px;
     border-radius:20px;
-    background:#27303d;
-    color:#d7d7d7;
+    background: rgb(237, 237, 237);
+    color:#000000;
     font-size:13px;
 }
 
@@ -100,8 +102,8 @@
 }
 
 .other-message{
-    background:#2d3139;
-    color:white;
+    background: rgb(237, 237, 237);
+    color:black;
     border-bottom-left-radius:5px;
 }
 
@@ -157,4 +159,24 @@
     width:20px;
     height:20px;
     filter:brightness(0) invert(1);
+}
+
+
+.links {
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    
+    margin-right: 20px;
+    border-radius: 8px;
+    color: #333;
+    text-decoration: none;
+    transition: 0.2s;
+    font-size: 17px;
+}
+
+/* HOVER */
+.links:hover {
+    background: #828282;
+    color: #000000;
 }

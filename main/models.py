@@ -1,6 +1,14 @@
 from django.db import models
 from bulletin_board import settings
+import os
+from django.utils.text import slugify
 
+        
+def get_slug_to_upload__path(instance,filename):
+    if instance:
+        return os.path.join('products', instance.product.slug, filename)
+    
+    
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -40,18 +48,25 @@ class Attribute(models.Model):
 class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     subcategory = models.ForeignKey(SubCategory,on_delete=models.CASCADE, related_name="products")
+    slug = models.SlugField(unique=True)
     name = models.CharField(max_length=50)
     description = models.TextField()
     price = models.DecimalField(max_digits=20,decimal_places=2,blank=False) 
     created_at = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        
+        super().save(*args, **kwargs) 
+    
     def __str__(self):
         return self.name
     
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE,related_name="images")
-    image = models.ImageField(upload_to='products/')
+    image = models.ImageField(upload_to=get_slug_to_upload__path)
 
     
 class AttributeValue(models.Model):
@@ -75,4 +90,3 @@ class Liked(models.Model):
 
     def __str__(self):
         return f"{self.user.username}, {self.product}"    
-        

@@ -4,7 +4,12 @@
 
     <div class="container-fluid" style="padding: 0;margin: 0;">
         <div class="row g-0">
-            <div class="col-lg-2">qwertyu</div>
+            <div class="col-lg-2">
+                <div style="margin-top: 20px;">
+                    <a class="links" href="{% url 'main:MyProducts' %}">Мои объявления</a>
+                    <a class="links" href="{% url 'main:ProductLiked' %}">Избранные</a>
+                </div>
+            </div>
 
 
             <div class="col-lg-10">
@@ -33,7 +38,7 @@
                                         <div class="chats">
                                             <img src="{{room.product.images.first.image.url}}" style="width: 90px;height: 65px;object-fit:inherit;border-radius: 10px;" alt="">
                                             <div style="display: flex;flex-direction:column;justify-content: space-between;">
-                                                <p id="chat-username" style="color: #000000;font-weight: bold;">
+                                                <p id="chat-username" class="chat-username" style="color: black; font-weight: bold;">
                                                     {% if room.user_a != request.user %}
                                                         {{room.user_a}}
                                                     {% else %}

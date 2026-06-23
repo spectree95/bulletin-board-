@@ -22,8 +22,6 @@ class Chat_author(DetailView):
             user_a = author,
             user_b = self.request.user
             )
-        print(f"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA {created}")
-        print(f"{room}")
         
         context["messages"] = Message.objects.filter(room=room)
         return context
