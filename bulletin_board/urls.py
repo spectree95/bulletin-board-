@@ -19,11 +19,22 @@ from django.urls import path,include, re_path
 from django.conf.urls.static import static
 from django.views.static import serve
 from . import settings
+import os
+from django.http import FileResponse, Http404
+
+def serve_media_production(request, path):
+    file_path = os.path.join(settings.MEDIA_ROOT, path)
+    if os.path.exists(file_path):
+        return FileResponse(open(file_path, 'rb'))
+    raise Http404("Файл не найден на сервере")
+
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('main.urls')),
     path('users/',include('users.urls')),
     path('realtime/',include('realtime.urls')),
-    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    re_path(r'^media/(?P<path>.*)$', serve_media_production),
 ]
                                                              

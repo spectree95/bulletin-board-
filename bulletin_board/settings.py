@@ -144,10 +144,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
-    os.path.join(BASE_DIR, 'media'), 
 ]
 
-WHITENOISE_KEEP_FILES_ON_REMOTE_RESIZE = False 
 WHITENOISE_AUTOREFRESH = True
 
 
