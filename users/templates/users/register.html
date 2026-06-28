@@ -1,11 +1,23 @@
 {% extends "main/base.html" %}
+{% load static %}
 
 {% block section %}
+    <link rel="stylesheet" href="{% static 'users/css/register.css' %}">
+
     <form action="{% url 'users:register' %}" method='POST'>
         {% csrf_token %}
-        {{form.as_p}}
-        <button type="submit">Создать</button>
+        {% for field in form %}
+            {{field.label_tag}}
+            {{field}}
+            {% if field.errors %}
+                {{field.errors}}
+            {% endif %}
+
+        {% endfor %}
+
+        <button class="create_btn" style="margin-top: 10px;" type="submit">Создать</button>
     </form>
 
+    
 {% endblock section %}
 

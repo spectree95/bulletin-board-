@@ -15,7 +15,7 @@ class CustomUserForm(UserCreationForm):
         'class': 'form-control',
         'placeholder': 'Подтвердите пароль'
     }))
-    
+        
     class Meta:
         model = User
         fields = ('username','last_name','first_name','email','phone_number','password1','password2')

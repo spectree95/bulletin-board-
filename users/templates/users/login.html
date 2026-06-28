@@ -1,9 +1,10 @@
 {% extends "main/base.html" %}
-
+{% load static %}
 {% block section %}
+    <link rel="stylesheet" href="{% static 'users/css/register.css' %}">
 
     <p>У вас нету аккаунта?</p>
-    <p>Можете зарегестрироваться здесь <a href="{% url 'users:register' %}">Регистрация</a></p>
+    <p>Можете зарегестрироваться здесь <a style="text-decoration: none;" href="{% url 'users:register' %}">Регистрация</a></p>
     {% for message in messages %}
         <p>{{ message }}</p>
     {% endfor %}
@@ -11,6 +12,8 @@
         {% csrf_token %}
         <input type="text" name="username" placeholder="username">
         <input type="password" name="password" placeholder="password">
-        <button type="submit">Войти</button>
+        <button class="create_btn" type="submit">Войти</button>
     </form>
+
+    
 {% endblock section %}

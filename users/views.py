@@ -21,11 +21,12 @@ def login_view(request):
 def register(request):
     if request.method == "GET":
         form = CustomUserForm()
-    else:
+    if request.method == "POST":
         form = CustomUserForm(data=request.POST)
-        new_user = form.save()
-        login(request, new_user)
-        return redirect('main:home')
+        if form.is_valid():
+            new_user = form.save()
+            login(request, new_user)
+            return redirect('main:home')
     context = {"form": form}
     return render(request, 'users/register.html',context)
 

@@ -1,0 +1,14 @@
+.create_btn {
+    background: #4a6cf7;
+    border: none;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 15px;
+}
+
+.create_btn:hover {
+    background: #3a59d9;
+}

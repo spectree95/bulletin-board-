@@ -245,7 +245,7 @@ class ProductLiked(LoginRequiredMixin, ListView):
 class DetailCategory(DetailView):
     model = Category
     context_object_name = "category"
-    template_name = "main/Category.html"
+    template_name = "main/category.html"
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
