@@ -7,7 +7,7 @@ from django.db.models import Q, Exists,OuterRef
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
-
+from .forms import ProductForm
 
 class Home(ListView):
     model = Category 
@@ -47,6 +47,7 @@ class ProductCreate(LoginRequiredMixin,CreateView):
     model = Product
     context_object_name = 'form'
     template_name = 'main/ProductCreate.html'
+    form_class = ProductForm
     fields = ['category','name','price','subcategory','description']
     
     def get_context_data(self, **kwargs):
@@ -79,7 +80,6 @@ class ProductCreate(LoginRequiredMixin,CreateView):
                     attribute_id=attribute_id,
                     value=value
                 )
-        print("Before images")
         try:
             images = self.request.FILES.getlist("images")
 
@@ -89,9 +89,7 @@ class ProductCreate(LoginRequiredMixin,CreateView):
                     image=img
                 )
                 product_image.full_clean()
-                print("full_clean OK")
                 product_image.save()
-                print("image saved")
 
         except ValidationError as e:
             form.add_error(None, e.messages[0])
@@ -99,7 +97,6 @@ class ProductCreate(LoginRequiredMixin,CreateView):
         
 
         return response
-    print("END")
     
     def form_invalid(self, form):
         print(form.errors)
@@ -158,6 +155,7 @@ class ProductDetail(DetailView):
      
 class ProductUpdate(LoginRequiredMixin,UpdateView):
     model = Product
+    form_class = ProductForm
     fields = ['category','name','price','subcategory','description']
     template_name = 'main/ProductUpdate.html'
     success_url = reverse_lazy('main:home')
@@ -204,13 +202,19 @@ class ProductUpdate(LoginRequiredMixin,UpdateView):
             
             
         
-        images = self.request.FILES.getlist("images")
-        for img in images:
-            ProductImage.objects.create(
-                image = img,
-                product = self.object
-            )
-        
+        try: 
+            images = self.request.FILES.getlist("images")
+            for img in images:
+                product_image =  ProductImage.objects(
+                    image = img,
+                    product = self.object
+                )
+                product_image.full_clean()
+                product_image.save()
+        except ValidationError as e:
+            form.add_error(None, e.message[0])
+            return self.form_invalid(form)
+            
         return response
         
         
