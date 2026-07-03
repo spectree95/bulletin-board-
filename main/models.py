@@ -2,8 +2,9 @@ from django.db import models
 from bulletin_board import settings
 import os
 from django.utils.text import slugify
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 
-        
 def get_slug_to_upload__path(instance,filename):
     if instance:
         return os.path.join('products', instance.product.slug, filename)
@@ -56,17 +57,25 @@ class Product(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
         
-        super().save(*args, **kwargs) 
+        if is_new:
+            self.slug = f"{slugify(self.name)}-{self.pk}"
+            super().save(update_fields=['slug'])    
     
     def __str__(self):
         return self.name
     
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE,related_name="images")
-    image = models.ImageField(upload_to=get_slug_to_upload__path)
+    image = models.ImageField(
+        upload_to=get_slug_to_upload__path,
+        validators=[FileExtensionValidator(
+            allowed_extensions=["png", 'jpeg', 'jpg', 'svg', 'raw', 'webp', 'tiff']
+        )]
+    )
+    
 
     
 class AttributeValue(models.Model):

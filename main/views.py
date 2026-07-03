@@ -78,10 +78,13 @@ class ProductCreate(LoginRequiredMixin,CreateView):
                 )
         images = self.request.FILES.getlist('images')
         for img in images:
-            ProductImage.objects.create(
+            product_image = ProductImage(
                 product = self.object,
                 image = img
             )
+            product_image.full_clean()
+            product_image.save()
+        
         
 
         return response
