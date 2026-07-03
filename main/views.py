@@ -65,7 +65,8 @@ class ProductCreate(LoginRequiredMixin,CreateView):
         return form
     
     
-    def form_valid(self, form):
+    def form_valid(self, form):    
+        print("START form_valid")
         form.instance.author = self.request.user
         response = super().form_valid(form)
 
@@ -78,6 +79,7 @@ class ProductCreate(LoginRequiredMixin,CreateView):
                     attribute_id=attribute_id,
                     value=value
                 )
+        print("Before images")
         try:
             images = self.request.FILES.getlist("images")
 
@@ -87,15 +89,17 @@ class ProductCreate(LoginRequiredMixin,CreateView):
                     image=img
                 )
                 product_image.full_clean()
+                print("full_clean OK")
                 product_image.save()
+                print("image saved")
 
         except ValidationError as e:
-            form.add_error(None, e)     
+            form.add_error(None, e.messages[0])
             return self.form_invalid(form)
-
         
 
         return response
+    print("END")
     
     def form_invalid(self, form):
         print(form.errors)
