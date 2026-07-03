@@ -6,6 +6,8 @@ from .models import Category,Product,ProductImage, Liked,SubCategory,Attribute, 
 from django.db.models import Q, Exists,OuterRef
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
+
 
 class Home(ListView):
     model = Category 
@@ -76,15 +78,21 @@ class ProductCreate(LoginRequiredMixin,CreateView):
                     attribute_id=attribute_id,
                     value=value
                 )
-        images = self.request.FILES.getlist('images')
-        for img in images:
-            product_image = ProductImage(
-                product = self.object,
-                image = img
-            )
-            product_image.full_clean()
-            product_image.save()
-        
+        try:
+            images = self.request.FILES.getlist("images")
+
+            for img in images:
+                product_image = ProductImage(
+                    product=self.object,
+                    image=img
+                )
+                product_image.full_clean()
+                product_image.save()
+
+        except ValidationError as e:
+            form.add_error(None, e)     
+            return self.form_invalid(form)
+
         
 
         return response

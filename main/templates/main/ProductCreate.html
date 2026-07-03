@@ -19,6 +19,11 @@
                         placeholder="Дайте краткое описание товара"
                         style="width: 700px; padding-left: 10px;border: 1.5px solid gray;border-radius: 3px;"
                     >
+                    {% if form.name.errors %}
+                        <div style="color:red;">
+                            {{ form.price.errors }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="form-category">
@@ -34,14 +39,23 @@
                 <div class="form-category">
                     <h5 style="font-size: 14px;padding: 0;">Подкатегория</h5>
                     {{ form.subcategory }}
+                    {% if form.subcategory.errors %}
+                        <div style="color:red;">
+                            {{ form.subcategory.errors }}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
     
             <div class="product-container">
                 <h4 style="font-size: 23px;">Фото</h4>
                 <input type="file" name="images" multiple style="border-radius: 3px;">
+                {% if form.non_field_errors %}
+                    <div style="color:red">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
             </div>
-    
             <div class="product-container">
                 <h4 style="font-size: 23px;">Описание </h4>
                 <textarea 
@@ -58,6 +72,13 @@
                 <div class="input-wrapper">
                     <input type="number" name="price" id="id_price" placeholder="0.00" >
                     <span class="currency">тг.</span>
+
+                    {% if form.price.errors %}
+                        <div style="color:red;">
+                            {{ form.price.errors }}
+                        </div>
+                    {% endif %}
+
                 </div>
             </div>
     
