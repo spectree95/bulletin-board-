@@ -48,7 +48,6 @@ class ProductCreate(LoginRequiredMixin,CreateView):
     context_object_name = 'form'
     template_name = 'main/ProductCreate.html'
     form_class = ProductForm
-    fields = ['category','name','price','subcategory','description']
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -67,7 +66,6 @@ class ProductCreate(LoginRequiredMixin,CreateView):
     
     
     def form_valid(self, form):    
-        print("START form_valid")
         form.instance.author = self.request.user
         response = super().form_valid(form)
 
