@@ -93,16 +93,11 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [[REDIS_URL] if REDIS_URL else [],{
-                "address": os.environ.get("REDIS_URL"),
-                "socket_connect_timeout": 30,
-                "socket_timeout": 30,
-                "retry_on_timeout": True,
-                "health_check_interval": 30,
-            }]
+            "hosts": [REDIS_URL] if REDIS_URL else [],
         },
     },
 }
+
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
