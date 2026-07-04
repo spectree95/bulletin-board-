@@ -6,7 +6,7 @@ const messageContainer = document.getElementById("chat-messages");
 const sendBtn = document.getElementById("message-send");
 
 const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-const socket = new WebSocket(`${wsProtocol} + ${window.location.host} + /ws/Messenger/`);
+const ws = new WebSocket(wsProtocol + window.location.host + `/ws/Messenger/`);
 
 document.querySelectorAll(".chat_item").forEach(el => {
     el.addEventListener("click", e => {
