@@ -41,11 +41,9 @@ class Search_view(ListView):
 
 
 class ProductCreate(LoginRequiredMixin,CreateView):
-    login_url = 'users/login'
-    redirect_field_name = 'main/ProductCreate.html'
+    login_url = 'users/login/'
     success_url = reverse_lazy('main:home')
     model = Product
-    context_object_name = 'form'
     template_name = 'main/ProductCreate.html'
     form_class = ProductForm
     
@@ -154,7 +152,6 @@ class ProductDetail(DetailView):
 class ProductUpdate(LoginRequiredMixin,UpdateView):
     model = Product
     form_class = ProductForm
-    fields = ['category','name','price','subcategory','description']
     template_name = 'main/ProductUpdate.html'
     success_url = reverse_lazy('main:home')
     
@@ -203,14 +200,14 @@ class ProductUpdate(LoginRequiredMixin,UpdateView):
         try: 
             images = self.request.FILES.getlist("images")
             for img in images:
-                product_image =  ProductImage.objects(
+                product_image =  ProductImage(
                     image = img,
                     product = self.object
                 )
                 product_image.full_clean()
                 product_image.save()
         except ValidationError as e:
-            form.add_error(None, e.message[0])
+            form.add_error(None, e.messages[0])
             return self.form_invalid(form)
             
         return response

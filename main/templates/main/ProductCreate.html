@@ -21,7 +21,7 @@
                     >
                     {% if form.name.errors %}
                         <div style="color:red;">
-                            {{ form.price.errors }}
+                            {{ form.name.errors }}
                         </div>
                     {% endif %}
                 </div>
@@ -39,9 +39,9 @@
                 <div class="form-category">
                     <h5 style="font-size: 14px;padding: 0;">Подкатегория</h5>
                     {{ form.subcategory }}
-                    {% if form.subcategory.errors %}
+                    {% if form.non_field_errors %}
                         <div style="color:red;">
-                            {{ form.subcategory.errors }}
+                            {{ form.non_field_errors }}
                         </div>
                     {% endif %}
                 </div>

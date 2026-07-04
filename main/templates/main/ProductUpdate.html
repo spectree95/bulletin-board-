@@ -25,6 +25,11 @@
                         placeholder="Дайте краткое описание товара"
                         style="width: 700px; padding-left: 10px;border: 1.5px solid gray;border-radius: 3px;"
                     >
+                    {% if form.name.errors %}
+                        <div style="color:red;">
+                            {{ form.name.errors }}
+                        </div>
+                    {% endif %}
                 </div>
 
                 <div class="form-category">
@@ -39,6 +44,11 @@
                 <div class="form-category">
                     <h5 style="font-size: 14px;padding: 0;">Подкатегория</h5>
                     {{ form.subcategory }}
+                    {% if form.non_field_errors %}
+                        <div style="color:red;">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
                 </div>
             </div>
     
@@ -58,13 +68,19 @@
                         </label>
                     {% endfor %}
                     <h5 style="font-size: 11px; color: gray;">Выберите фотографии, которые хотите удалить</h5>
-                
+                       
+
                 {% endif %}
                 
 
 
                 <h5 style="font-size: 14px;">Добавить новые фотографии</h5>
                 <input type="file" name="images" value="{{object.images}}" multiple style="border-radius: 3px;">
+                {% if form.non_field_errors %}
+                        <div style="color:red;">
+                            {{ form.non_field_errors }}
+                        </div>
+                {% endif %}             
             </div>
     
             <div class="product-container">
@@ -83,6 +99,12 @@
                 <div class="input-wrapper">
                     <input type="number" name="price" id="id_price" value="{{form.price.value}}" placeholder="0.00" >
                     <span class="currency">тг.</span>
+                    {% if form.price.errors %}
+                        <div style="color:red;">
+                            {{ form.price.errors }}
+                        </div>
+                    {% endif %}
+
                 </div>
             </div>
     

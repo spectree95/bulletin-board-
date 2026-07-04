@@ -10,21 +10,21 @@ class ProductForm(forms.ModelForm):
         
         def clean(self):
             cleaned_data = super().clean()
-            
             name = cleaned_data.get("name")
-            if len(name) < 8:
-                raise forms.ValidationError("Слишком короткое название.")
-            
             category = cleaned_data.get("category")
             subcategory = cleaned_data.get('subcategory')
-            if subcategory and subcategory.category != category:
+            price = cleaned_data.get("price")
+            
+            
+            if name and len(name) < 8:
+                self.add_error("name", "Слишком короткое название.")
+            
+            if subcategory and subcategory and subcategory.category != category:
                 raise forms.ValidationError("Подкатегория не принадлежит выбранной категории.")            
             
-            price = cleaned_data.get("price")
-            if price < 0:
-                raise forms.ValidationError("Цена должна быть больше 0.")
+            if price and price < 0:
+                self.add_error("Цена должна быть больше 0.")
             
-                
             return cleaned_data
         
         
