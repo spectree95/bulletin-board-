@@ -3,7 +3,8 @@ const productId = parseInt(input.dataset.productId);
 const productOwnerId = input.dataset.productOwnerId;
 const currentUserId = input.dataset.currentUserId
 
-const ws = new WebSocket(`ws://${location.host}/ws/chat_author/${productId}/`);
+const wsProtocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+const ws = new WebSocket(`${wsProtocol}${window.location.host}/ws/chat_author/${productId}/`);
 
 const messageContainer = document.getElementById("messages");
 const sendBtn = document.getElementById("message-send");

@@ -16,15 +16,7 @@
                 <h4 style="font-size: 25px;">Опишите в подробностях</h4>
                 <div>
                     <h5 style="font-size: 14px;padding: 0;">Название вашего продукта</h5>
-                    <input 
-                        type="text" 
-                        name="name" 
-                        id="id_name"
-                        value="{{form.name.value}}"
-                        class="input-field"
-                        placeholder="Дайте краткое описание товара"
-                        style="width: 700px; padding-left: 10px;border: 1.5px solid gray;border-radius: 3px;"
-                    >
+                    {{form.name}}
                     {% if form.name.errors %}
                         <div style="color:red;">
                             {{ form.name.errors }}
@@ -44,9 +36,9 @@
                 <div class="form-category">
                     <h5 style="font-size: 14px;padding: 0;">Подкатегория</h5>
                     {{ form.subcategory }}
-                    {% if form.non_field_errors %}
+                    {% if form.subcategory.errors%}
                         <div style="color:red;">
-                            {{ form.non_field_errors }}
+                            {{ form.subcategory.errors }}
                         </div>
                     {% endif %}
                 </div>
@@ -85,19 +77,13 @@
     
             <div class="product-container">
                 <h4 style="font-size: 25px;">Описание </h4>
-                <textarea 
-                    type="text"
-                    name="description"
-                    id="id_description"    
-                    style="width: 700px;height: 150px; padding-left: 10px;border: 1.5px solid gray;border-radius: 3px;"
-                    placeholder="Напишите о деталях вашего продукта"
-                >{{object.description}}</textarea>
+                {{form.description}}
             </div>
     
             <div class="product-container">
                 <h4 style="font-size: 25px;">Цена</h4>
                 <div class="input-wrapper">
-                    <input type="number" name="price" id="id_price" value="{{form.price.value}}" placeholder="0.00" >
+                    {{form.price}}
                     <span class="currency">тг.</span>
                     {% if form.price.errors %}
                         <div style="color:red;">
