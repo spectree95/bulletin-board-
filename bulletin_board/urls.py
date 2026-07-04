@@ -22,6 +22,8 @@ from . import settings
 import os
 from django.http import FileResponse, Http404
 
+
+
 def serve_media_production(request, path):
     file_path = os.path.join(settings.MEDIA_ROOT, path)
     if os.path.exists(file_path):
@@ -37,4 +39,6 @@ urlpatterns = [
     path('realtime/',include('realtime.urls')),
     re_path(r'^media/(?P<path>.*)$', serve_media_production),
 ]
-                                                             
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)                                                             

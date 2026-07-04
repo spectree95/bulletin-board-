@@ -32,9 +32,9 @@
                 <div class="form-category">
                     <h5 style="font-size: 14px;padding: 0;">Подкатегория</h5>
                     {{ form.subcategory }}
-                    {% if form.subcategory %}
+                    {% if form.subcategory.errors %}
                         <div style="color:red;">
-                            {{ form.subcategory }}
+                            {{ form.subcategory.errors }}
                         </div>
                     {% endif %}
                 </div>
@@ -60,13 +60,13 @@
                     {{form.price}}
                     <span class="currency">тг.</span>
 
-                    {% if form.price.errors %}
-                        <div style="color:red;">
-                            {{ form.price.errors }}
-                        </div>
-                    {% endif %}
-
+                    
                 </div>
+                {% if form.price.errors %}
+                    <div style="color:red;">
+                        {{ form.price.errors }}
+                    </div>
+                {% endif %}
             </div>
     
             <div class="product-container additional-information">
