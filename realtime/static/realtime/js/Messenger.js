@@ -120,15 +120,3 @@ input.addEventListener("keyup", function(e){
     }
 })
 
-
-const btnMenu = document.getElementById("btn-menu");
-const menu = document.getElementById("chat-menu");
-btnMenu.addEventListener("click", () =>{
-    menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
-})
-
-document.addEventListener("click", (e) => {
-    if (!menu.contains(e.target) && e.target !== btnMenu) {
-        menu.style.display = "none";
-    }
-})
