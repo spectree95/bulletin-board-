@@ -6,7 +6,7 @@ from django.forms import inlineformset_factory
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ["name", "price", "category", "subcategory", "description"]
+        fields = ["name", "price", "category", "subcategory", "description",'author']
         widgets = {
             
             "name" : forms.TextInput(attrs={
