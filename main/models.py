@@ -41,10 +41,15 @@ class Attribute(models.Model):
     name = models.CharField(max_length=50)
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE, related_name="attributes")
     
+    ATTRIBUTE_TYPES = [
+        ("text", "Текст"),
+        ("number", "Число"),
+    ]
+    attr_type = models.CharField(max_length=10, choices=ATTRIBUTE_TYPES, default="text")
+
     def __str__(self):
         return self.name
 
-    
 
 class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -76,13 +81,31 @@ class ProductImage(models.Model):
         )]
     )
     
-
+    
     
 class AttributeValue(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE)
     value = models.CharField(max_length=50)
     
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        
+        if self.attribute.attr_type == "number":
+            try:
+                float(self.value)
+            except (ValueError, TypeError):
+                raise ValidationError({"value": f"Значение атрибута '{self.attribute.name}' должно быть числом."})
+
+        if self.attribute.attr_type == "number":
+            try:
+                self.value > 0
+            except:
+                raise ValidationError({"value": f"Значение атрибута {self.attribute.name} должа быть больше 0."})
+            
+        return cleaned_data
+        
     class Meta:
         unique_together = ('product','attribute')
     

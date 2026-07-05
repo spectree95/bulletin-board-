@@ -1,13 +1,13 @@
-from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Category,Product,ProductImage, Liked,SubCategory,Attribute, AttributeValue
 from django.db.models import Q, Exists,OuterRef
 from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ValidationError
 from .forms import ProductForm
+from django.db import transaction
+
 
 class Home(ListView):
     model = Category 
@@ -64,38 +64,51 @@ class ProductCreate(LoginRequiredMixin,CreateView):
     
     
     def form_valid(self, form):    
-        form.instance.author = self.request.user
-        response = super().form_valid(form)
-
-        for key, value in self.request.POST.items():
-            if key.startswith("attribute_"):
-                attribute_id = key.split("_")[1]
-
-                AttributeValue.objects.create(
-                    product=self.object,
-                    attribute_id=attribute_id,
-                    value=value
-                )
+        errors = []
         try:
-            images = self.request.FILES.getlist("images")
+            with transaction.atomic():
+                form.instance.author = self.request.user
+                response = super().form_valid(form)
+                for key, value in self.request.POST.items():
+                    if key.startswith("attribute_"):
+                        attribute_id = key.split("_")[1]
 
-            for img in images:
-                product_image = ProductImage(
-                    product=self.object,
-                    image=img
-                )
-                product_image.full_clean()
-                product_image.save()
+                        attr_value = AttributeValue(
+                            product=self.object,
+                            attribute_id=attribute_id,
+                            value=value
+                        )
+                        try:
+                            attr_value.full_clean()
+                            attr_value.save()
+                        except ValidationError as e:
+                            errors.extend(e.messages)
 
-        except ValidationError as e:
-            form.add_error(None, e.messages[0])
-            return self.form_invalid(form)
+                images = self.request.FILES.getlist("images")
+
+                for img in images:
+                    product_image = ProductImage(
+                        product=self.object,
+                        image=img
+                    )
+                    try:
+                        product_image.full_clean()
+                        product_image.save()
+                    except ValidationError as e:
+                        errors.extend(e.messages)
+                if errors:
+                    raise ValidationError(errors)
         
+        except ValidationError:
+            for error in errors:
+                form.add_error(None, error)
+            return self.form_invalid(form)
 
         return response
     
     def form_invalid(self, form):
-        print(form.errors)
+        print("FORM ERRORS:", form.errors)
+        print("NON FIELD ERRORS:", form.non_field_errors())
         return super().form_invalid(form)
     
     

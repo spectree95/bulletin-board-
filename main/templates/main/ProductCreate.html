@@ -6,6 +6,11 @@
         <h2 style="color: #4a6cf7;">Создать объявление</h2>
         <form class="product-form" action="{% url 'main:ProductCreate' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
+            {% if form.non_field_errors %}
+                    <div style="color:red">
+                        {{ form.non_field_errors }}
+                    </div>
+            {% endif %}
             <div class="product-container product-detail">
                 <h4 style="font-size: 23px;">Опишите в подробностях</h4>
                 
@@ -43,11 +48,6 @@
             <div class="product-container">
                 <h4 style="font-size: 23px;">Фото</h4>
                 <input type="file" name="images" multiple style="border-radius: 3px;">
-                {% if form.non_field_errors %}
-                    <div style="color:red">
-                        {{ form.non_field_errors }}
-                    </div>
-                {% endif %}
             </div>
             <div class="product-container">
                 <h4 style="font-size: 23px;">Описание </h4>
