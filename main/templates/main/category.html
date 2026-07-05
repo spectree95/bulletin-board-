@@ -11,8 +11,9 @@
         {% for subcategory in subcategories %}
             <a href="{% url 'main:SubCategoryProducts' pk=subcategory.id %}" class="subcategory-card">
                 <div class="subcategory-image">
-                    <!-- Пока плейсхолдер, потом можно заменить на реальное изображение -->
-                    <div class="placeholder">Фото</div>
+                    {% if subcategory.img %}
+                        <img src="{{ subcategory.img.url }}" alt="{{ subcategory.name }}">
+                    {% endif %}
                 </div>
                 <div class="subcategory-info">
                     <h5>{{ subcategory.name }}</h5>

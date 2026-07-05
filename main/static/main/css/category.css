@@ -34,9 +34,16 @@
     align-items: center;
 }
 
+.subcategory-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
 .subcategory-image .placeholder {
     font-size: 14px;
     color: #aaa;
+    
 }
 
 /* Информация */
