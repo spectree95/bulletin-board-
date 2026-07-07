@@ -4,29 +4,29 @@ A full-featured online marketplace built with **Django**, where users can create
 
 ---
 
-# 🌍 Live Demo
+# Live Demo
 
 **https://bulletin-board-ftyh.onrender.com**
 
 ---
 
-# ✨ Features
+# Features
 
-* 👤 User registration & authentication
-* 🔐 Secure login system
-* 📦 Create, edit and delete product listings
-* 🗂 Categories & subcategories
-* 🏷 Dynamic product attributes
-* 🖼 Multiple image upload
-* ❤️ Like system
-* 🔍 Product search & filtering
-* 💬 Real-time private chat (Django Channels + WebSocket)
-* 📱 Responsive interface
-* 🛠 Django Admin Panel
+* User registration & authentication
+* Secure login system
+* Create, edit and delete product listings
+* Categories & subcategories
+* Dynamic product attributes
+* Multiple image upload
+* Like system
+* Product search & filtering
+* Real-time private chat (Django Channels + WebSocket)
+* Responsive interface
+* Django Admin Panel
 
 ---
 
-# 🛠 Tech Stack
+# Tech Stack
 
 ### Backend
 
@@ -55,7 +55,7 @@ A full-featured online marketplace built with **Django**, where users can create
 
 ---
 
-# ⚙️ Installation
+# Installation
 
 Clone the repository
 
@@ -115,7 +115,7 @@ python manage.py runserver
 
 ---
 
-# 📂 Project Structure
+# Project Structure
 
 ```
 bulletin_board/
@@ -133,7 +133,7 @@ bulletin_board/
 
 ---
 
-# 🚀 Future Improvements
+# Future Improvements
 
 * Email verification
 * Notifications
@@ -146,11 +146,11 @@ bulletin_board/
 
 ---
 
-# 👨‍💻 Author
+# Author
 
 **Nurbol Beysenbai**
 
-📧 [beysenbaynurboo@gmail.com](mailto:beysenbaynurboo@gmail.com)
+[beysenbaynurboo@gmail.com](mailto:beysenbaynurboo@gmail.com)
 
 GitHub:
 https://github.com/spectree95
