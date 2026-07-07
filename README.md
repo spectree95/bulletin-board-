@@ -51,17 +51,7 @@ A full-featured online marketplace built with **Django**, where users can create
 
 ---
 
-# 📸 Screenshots
 
-Add screenshots here:
-
-| Home       | Product    |
-| ---------- | ---------- |
-| screenshot | screenshot |
-
-| Chat       | Profile    |
-| ---------- | ---------- |
-| screenshot | screenshot |
 
 ---
 
