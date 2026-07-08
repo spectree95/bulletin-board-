@@ -9,37 +9,38 @@
                 <hr style="margin-top: 10px;height: 1px;opacity: 1; margin-bottom: 30px;border: 1px solid rgb(37, 37, 37);" class="divider" >
             </div>
             {% for product in products %}
+                <a href="{% url 'main:Product' product.id %}" style="text-decoration: none;">
 
-
-                <div class="product-card" style="margin-bottom: 30px;">
-                    <div class="product-image">
-                        <div>
-                            <img  class="product-photo" src="{{product.images.first.image.url}}" alt="123">
+                    <div class="product-card" style="margin-bottom: 30px;">
+                        <div class="product-image">
+                            <div>
+                                <img  class="product-photo" src="{{product.images.first.image.url}}" alt="123">
+                            </div>
+                            <img
+                            class="like"
+                            style="cursor: pointer; height: 50px;width: 50px;"
+                            src="
+                                {% if product.is_liked %}
+                                    {% static 'main/image/red_heart.png' %}
+                                
+                                {% else %}
+                                    {% static 'main/image/black_heart.png' %}
+                                {% endif %}"
+                            data-url="{% url 'main:ProductLike' %}"
+                            data-product-id="{{product.id}}"
+                            data-black-heart="{% static 'main/image/black_heart.png' %}"
+                            data-red-heart="{% static 'main/image/red_heart.png' %}"
+                            alt=""
+                            >
                         </div>
-                        <img
-                          class="like"
-                          style="cursor: pointer; height: 50px;width: 50px;"
-                          src="
-                            {% if product.is_liked %}
-                                {% static 'main/image/red_heart.png' %}
-                             
-                            {% else %}
-                                {% static 'main/image/black_heart.png' %}
-                            {% endif %}"
-                          data-url="{% url 'main:ProductLike' %}"
-                          data-product-id="{{product.id}}"
-                          data-black-heart="{% static 'main/image/black_heart.png' %}"
-                          data-red-heart="{% static 'main/image/red_heart.png' %}"
-                          alt=""
-                        >
+                        <div class="product-info">
+                            <h4>{{ product.name }}</h4>
+                            <p class="price">{{ product.price }} ₸</p>
+                            <p class="created">Добавлен: {{ product.created_at|date:"d.m.Y H:i" }}</p>
+                            <p class="author">Автор: {{ product.author.username }}</p>
+                        </div>
                     </div>
-                    <div class="product-info">
-                        <a href="{% url 'main:Product' product.id %}"><h4>{{ product.name }}</h4></a>
-                        <p class="price">{{ product.price }} ₸</p>
-                        <p class="created">Добавлен: {{ product.created_at|date:"d.m.Y H:i" }}</p>
-                        <p class="author">Автор: {{ product.author.username }}</p>
-                    </div>
-                </div>
+                </a>
             {% empty %}
                 <p>Товары не найдены</p>
             {% endfor %}
