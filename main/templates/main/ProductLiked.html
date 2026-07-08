@@ -21,10 +21,10 @@
                     <p class="author">Автор: {{ like.product.author.username }}</p>
                 </div>
             </div>
-            {% empty %}
-            <h6 style="display: flex;align-items: center;justify-content: center;">Поставьте лайк на понравившиеся объявления, чтобы увидеть их здесь.</h6>
-
+            
         {% endfor %}
+        {% empty %}
+        <h1 style="display: flex;align-items: center;justify-content: center;">Поставьте лайк на понравившиеся объявления, чтобы увидеть их здесь.</h1>
         
     </div>
 </section>

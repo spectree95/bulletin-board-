@@ -38,6 +38,13 @@ document.querySelectorAll(".chat_item").forEach(el => {
         chatImg.src = productImg 
 
         document.getElementById("chat-input-container").style.display = "flex"
+        if(window.innerWidth<=768){
+
+            document.getElementById("chat-list").style.display="none";
+
+            document.getElementById("chat-window").style.display="block";
+
+        }
 
         input.dataset.room = room
         input.dataset.productId = productId
@@ -120,3 +127,16 @@ input.addEventListener("keyup", function(e){
     }
 })
 
+const back=document.getElementById("back-chat");
+
+back.onclick=function(){
+
+    if(window.innerWidth<=768){
+
+        document.getElementById("chat-window").style.display="none";
+
+        document.getElementById("chat-list").style.display="block";
+
+    }
+
+}

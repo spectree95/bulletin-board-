@@ -275,4 +275,60 @@ section {
 }
 
 
+/* =========================
+   Mobile
+========================= */
 
+@media (max-width:768px){
+
+    .custom-navbar{
+        padding:15px;
+    }
+
+    .nav-body{
+        display:flex;
+        flex-direction:column;
+        gap:15px;
+        align-items:stretch;
+    }
+
+    .search-form{
+        width:100%;
+    }
+
+    .search-box{
+        width:100%;
+    }
+
+    .search-box input{
+        width:100%;
+    }
+
+    .nav-right{
+        display:flex;
+        flex-direction:column;
+        width:100%;
+        gap:10px;
+    }
+
+    .create-btn,
+    .user-btn{
+        width:100%;
+        text-align:center;
+    }
+
+    section{
+        margin:0 15px;
+    }
+
+    .category-grid{
+        grid-template-columns:1fr;
+    }
+
+    .footer-container{
+        display:flex;
+        flex-direction:column;
+        gap:20px;
+    }
+
+}

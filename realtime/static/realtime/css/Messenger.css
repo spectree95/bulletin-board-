@@ -180,3 +180,58 @@
     background: #828282;
     color: #000000;
 }
+
+/* =========================
+   MOBILE
+========================= */
+
+.back-chat{
+    display:none;
+}
+
+@media(max-width:768px){
+
+#chat-list{
+    display:block;
+}
+
+#chat-window{
+    display:none;
+}
+
+.back-chat{
+    display:block;
+    border:none;
+    background:none;
+    font-size:28px;
+    margin-left:15px;
+    cursor:pointer;
+}
+
+.chats img{
+    width:60px;
+    height:60px;
+}
+
+.chat-p{
+    max-width:160px;
+}
+
+.message{
+    max-width:80%;
+}
+
+.chat-input-container{
+    padding:10px;
+}
+
+.chat-tg-btn{
+    width:45px;
+    height:45px;
+}
+
+#chat-container{
+    height:60vh;
+}
+
+}
