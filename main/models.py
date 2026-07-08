@@ -95,16 +95,14 @@ class AttributeValue(models.Model):
         
         if self.attribute.attr_type == "number":
             try:
-                float(self.value)
-            except (ValueError, TypeError):
-                raise ValidationError({"value": f"Значение атрибута '{self.attribute.name}' должно быть числом."})
-
-        if self.attribute.attr_type == "number":
-            try:
-                self.value > 0
-            except:
-                raise ValidationError({"value": f"Значение атрибута {self.attribute.name} должа быть больше 0."})
-            
+                if float(self.value) <= 0:
+                    raise ValidationError({
+                        "value": f"Значение атрибута {self.attribute.name} должно быть больше 0."
+                    })
+            except (TypeError, ValueError):
+                raise ValidationError({
+                    "value": f"Значение атрибута {self.attribute.name} должно быть числом."
+                })
         return cleaned_data
         
     class Meta:
