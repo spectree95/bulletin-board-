@@ -73,6 +73,7 @@ MIDDLEWARE = [
 
 CSRF_TRUSTED_ORIGINS = [
     'https://bulletin-board-ftyh.onrender.com',
+    "https://bulletin-board-docker.onrender.com",
 ]
 
 ROOT_URLCONF = 'bulletin_board.urls'
