@@ -22,13 +22,22 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-_c&f^)v4xl#=h+a1sxoclfrvtuov&(bzq%xk^xjhvtwmv39d_z'
+SECRET_KEY = os.getenv(
+    "SECRET_KEY", 
+    "django-insecure-dev-key",
+)
+
+# SECRET_KEY = ''
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = os.getenv(
+    "ALLOWED_HOSTS",
+    "127.0.0.1,localhost"
+).split(",")
 
 
 # Application definition
@@ -87,13 +96,13 @@ WSGI_APPLICATION = 'bulletin_board.wsgi.application'
 
 
 ASGI_APPLICATION = 'bulletin_board.asgi.application'
-REDIS_URL = os.environ.get("REDIS_URL")
+REDIS_URL = os.environ.get("REDIS_URL", "redis://redis:6379")
 
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [REDIS_URL] if REDIS_URL else [],
+            "hosts": [REDIS_URL],
         },
     },
 }
@@ -104,7 +113,7 @@ CHANNEL_LAYERS = {
 
 DATABASES = {
     "default": dj_database_url.config(
-        default="sqlite:///db.sqlite3",
+        default=os.getenv("DATABASE_URL", "sqlite:///db.sqlite3"),
         conn_max_age=600,
     )
 }
