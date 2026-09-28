@@ -98,19 +98,20 @@ WSGI_APPLICATION = 'bulletin_board.wsgi.application'
 
 ASGI_APPLICATION = 'bulletin_board.asgi.application'
 REDIS_URL = os.environ.get("REDIS_URL", "redis://redis:6379")
-if "RENDER" in os.environ and REDIS_URL.startswith("redis://"):
-    REDIS_URL = REDIS_URL.replace("redis://", "rediss://", 1)
+
 
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [
-                {
-                    "address": REDIS_URL,
-                    "ssl_cert_reqs": None,  # Отключаем строгую проверку SSL для Render
-                }
-            ],
+            "hosts": [REDIS_URL],
+            "redis_config": {
+                "socket_timeout": 20,       
+                "socket_connect_timeout": 20, 
+                "socket_keepalive": True,    
+                "retry_on_timeout": True,   
+                "health_check_interval": 10  
+            },
             "capacity": 1500,
             "expiry": 60,
         },
