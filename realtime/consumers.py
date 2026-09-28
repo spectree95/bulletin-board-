@@ -11,12 +11,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
         self.user = self.scope['user']
         if hasattr(self.user, "_wrapped") and self.user._wrapped is not None:
             self.user = self.user._wrapped 
+        
+        if self.user.is_anonymous:
+            await self.close()
+            return
+        
         product_id = self.scope["url_route"]["kwargs"].get('pk')
         if product_id:
             product = await self.get_product(product_id)
             author = product.author
             room, created = await self.get_or_create_room(product, author, self.user)
-            self.group_name = f"chat_product_{room.id}"
+            self.group_name = f"chat_product{room.id}"
             self.room = room
             await self.channel_layer.group_add(self.group_name, self.channel_name)
 
