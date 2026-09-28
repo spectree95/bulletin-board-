@@ -99,19 +99,26 @@ WSGI_APPLICATION = 'bulletin_board.wsgi.application'
 ASGI_APPLICATION = 'bulletin_board.asgi.application'
 REDIS_URL = os.environ.get("REDIS_URL", "redis://redis:6379")
 
+import os
+
+REDIS_URL = os.environ.get("REDIS_URL", "redis://localhost:6379")
+
 
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [REDIS_URL],
-            "redis_config": {
-                "socket_timeout": 20,       
-                "socket_connect_timeout": 20, 
-                "socket_keepalive": True,    
-                "retry_on_timeout": True,   
-                "health_check_interval": 10  
-            },
+            "hosts": [
+                {
+                    "address": REDIS_URL,
+                    # Все настройки для стабильности в облаке Render передаем СЮДА:
+                    "socket_timeout": 20,          # Даем больше времени на ответ
+                    "socket_connect_timeout": 20,  # Больше времени на само коннект
+                    "socket_keepalive": True,       # Не даем Render обрывать соединение
+                    "retry_on_timeout": True,      # Переподключаться при микро-лагах
+                    "health_check_interval": 10     # Пинговать каждые 10 секунд
+                }
+            ],
             "capacity": 1500,
             "expiry": 60,
         },
