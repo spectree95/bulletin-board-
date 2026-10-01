@@ -22,12 +22,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         
         self.product_id = self.scope["url_route"]["kwargs"].get('pk')
         if self.product_id:
-            product = await self.get_product(self.product_id)
-            first_img = product.images.first()
-            self.product_img_url = first_img.image.url if first_img else "/static/images/default.jpg"
+            product,img = await self.get_product_data(self.product_id)
             self.product = product
-            author = product.author
-            room, created = await self.get_or_create_room(product, author, self.user)
+            self.product_img = img
+            room, created = await self.get_or_create_room(product, product.author, self.user)
             self.group_name = f"chat_product{room.id}"
             self.room = room
             await self.channel_layer.group_add(self.group_name, self.channel_name)
@@ -75,7 +73,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "sender_name": self.user.username,
                 "last_message": message,
                 "product_id": self.product_id,
-                "product_img": self.product_img_url,
+                "product_img": self.product_img,
             })
             
     
@@ -131,10 +129,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         
         
     @database_sync_to_async
-    def get_product(self,product_id):
-        return Product.objects.select_related("author").get(id=product_id)        
-    
-
+    def get_product_data(self,product_id):
+        product = Product.objects.select_related("author").get(id=product_id)        
+        first_img = product.images.first()
+        img = first_img.image.url if first_img else "/static/images/default.jpg"
+        return product,img
 
  
     @database_sync_to_async    
