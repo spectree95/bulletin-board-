@@ -27,7 +27,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.product_img = img
             room, created = await self.get_or_create_room(product, product.author, self.user)
             self.group_name = f"chat_product{room.id}"
-            self.room = room
+
             await self.channel_layer.group_add(self.group_name, self.channel_name)
 
 
@@ -47,8 +47,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
             room_id = data.get("room_id")
             created = datetime.now(timezone.utc).isoformat()
             if room_id:
-                self.room = await database_sync_to_async(Room.objects.get)(id=room_id)
-            
+                self.room = await database_sync_to_async(
+                    lambda: Room.objects.select_related('user_a', 'user_b').get(id=room_id)
+                )()
             await database_sync_to_async(Message.objects.create)(
                 room = self.room,
                 sender = self.user,
