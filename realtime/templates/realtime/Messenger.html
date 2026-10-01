@@ -81,15 +81,16 @@
 
                             </div>
             
-                            <div id="chat-input-container" class="chat-input-container" style="display: none;border-left: 1px solid #d6d6d6;border-left: 1px solid #d6d6d6;">
+                            <div id="chat-input-container" class="chat-input-container" style="display: none;">
                                 <input 
                                     data-current-user-id="{{request.user.username}}"
                                     data-product="{{room.last_message.product}}"
                                     type="text"
-                                    style="height: 50px;border-radius: 30px;padding-left: 10px;align-items: center;background: #f1f1f1;" placeholder="Напишите сообщение..."
+                                    placeholder="Напишите сообщение..."
                                     id="chat-input">
                                 <button class="chat-tg-btn" style="color: white;" type="submit" id="message-send">➤</button>
                             </div>
+
                         </div>    
                     </div>
                 </div>
@@ -100,4 +101,3 @@
   <script src="{% static 'realtime/js/Messenger.js' %}"></script>
   <link rel="stylesheet" href="{% static 'realtime/css/Messenger.css' %}">
 {% endblock section %}
-
