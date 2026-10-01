@@ -1,7 +1,7 @@
 import json
 from main.models import Product
 from .models import Message,Room
-from bulletin_board import settings
+from datetime import datetime
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
@@ -39,13 +39,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
         elif command == "send":
             message = data.get("message", "")
             room_id = data.get("room_id")
+            time = datetime.now()
             if room_id:
                 self.room = await database_sync_to_async(Room.objects.get)(id=room_id)
             
             await database_sync_to_async(Message.objects.create)(
                 room = self.room,
                 sender = self.user,
-                text = message
+                text = message,
+                created = time,
             )
             
             await self.channel_layer.group_send(self.group_name,{
@@ -53,8 +55,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "message": message,
                 "sender_id": self.user.id,
                 "room_id": self.room.id,
-                "sender_name": self.user.username
-                
+                "sender_name": self.user.username,
+                "created": time,
             })
             
     
