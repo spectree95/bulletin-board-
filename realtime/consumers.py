@@ -12,18 +12,25 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if hasattr(self.user, "_wrapped") and self.user._wrapped is not None:
             self.user = self.user._wrapped 
         
+        self.personal_group = f"user_chats_{self.user.id}"
+        await self.channel_layer.group_add(self.personal_group, self.channel_name)
+        
         if self.user.is_anonymous:
             await self.close()
             return
         
-        product_id = self.scope["url_route"]["kwargs"].get('pk')
-        if product_id:
-            product = await self.get_product(product_id)
+        self.product_id = self.scope["url_route"]["kwargs"].get('pk')
+        if self.product_id:
+            product = await self.get_product(self.product_id)
+            first_img = product.images.first()
+            self.product_img_url = first_img.image.url if first_img else "/static/images/default.jpg"
+            self.product = product
             author = product.author
             room, created = await self.get_or_create_room(product, author, self.user)
             self.group_name = f"chat_product{room.id}"
             self.room = room
             await self.channel_layer.group_add(self.group_name, self.channel_name)
+
 
         await self.accept()
 
@@ -49,6 +56,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 text = message,
             )
             
+            recipient = self.room.user_a if self.room.user_b == self.user else self.room.user_b
+            recipient_group = f"user_chats_{recipient.id}"
+            
             await self.channel_layer.group_send(self.group_name,{
                 "type": "chat_message",
                 "message": message,
@@ -58,10 +68,23 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "created": created,
             })
             
+            await self.channel_layer.group_send(recipient_group,{
+                "type": "new_room_created",
+                "room_id": self.room_id,
+                "sender_name": self.user.username,
+                "last_message": message,
+                "product_id": self.product_id,
+                "product_img": self.product_img_url,
+            })
+            
     
     async def disconnect(self, close_code):
         if hasattr(self, "group_name"):
             await self.channel_layer.group_discard(self.group_name,self.channel_name)
+            
+        if hasattr(self, "personal_group"):
+            await self.channel_layer.group_discard(self.personal_group, self.channel_name)
+    
     
     async def chat_message(self,event):
         await self.send(text_data=json.dumps({
@@ -72,7 +95,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "created": event["created"]
         }))
             
-            
+    
+    async def new_room_created(self,event):
+        await self.send(text_data=json.dumps({
+            "room_id": event["room_id"],
+            "sender_name": event["sender_name"],
+            "last_messages": event["last_message"],
+        }))
+    
+    
     async def join_room(self, room_id):
         if getattr(self, "group_name", None):
             await self.channel_layer.group_discard(self.group_name, self.channel_name)    
@@ -111,3 +142,5 @@ class ChatConsumer(AsyncWebsocketConsumer):
             user_a = user_a,
             user_b = user_b
         )
+        
+    

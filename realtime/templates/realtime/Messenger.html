@@ -26,7 +26,7 @@
           
                             </div>
                             
-                            <div style="">
+                            <div id="chats-sidebar-list">
                                 {% for room in rooms %}
                                     <a href="#" class="chat_item"
                                         data-product-id="{{ room.product.id }}" 
@@ -36,7 +36,7 @@
                                         data-product-img="{{room.product.images.first.image.url}}"
                                         style="text-decoration: none;"> 
                         
-                                        <div class="chats">
+                                        <div class="chat">
                                             <img src="{{room.product.images.first.image.url}}" style="width: 90px;height: 65px;object-fit:inherit;border-radius: 10px;" alt="">
                                             <div style="display: flex;flex-direction:column;justify-content: space-between;">
                                                 <p id="chat-username" class="chat-username" style="color: black; font-weight: bold;">

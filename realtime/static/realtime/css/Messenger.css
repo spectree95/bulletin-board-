@@ -18,11 +18,11 @@
     transition:.2s;
 }
 
-.chat_item:hover .chats{
+.chat_item:hover .chat{
     background: rgb(237, 237, 237);
 }
 
-.chats{
+.chat{
     display:flex;
     gap:12px;
     padding:12px;
@@ -32,7 +32,7 @@
     align-items: center;
 }
 
-.chats img{
+.chat img{
     width:70px;
     height:70px;
     border-radius:12px;
@@ -83,7 +83,7 @@
     overflow-y: auto;
     background: white;
     padding: 25px;
-    padding-bottom: 20px;
+    padding-bottom: 100px;
     box-sizing: border-box;
 }
 
@@ -232,7 +232,7 @@
         cursor:pointer;
     }
 
-    .chats img{
+    .chat img{
         width:60px;
         height:60px;
     }
