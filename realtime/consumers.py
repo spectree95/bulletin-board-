@@ -43,41 +43,35 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.join_room(self.room_id)
             
         elif command == "send":
-            message = data.get("message", "")
+            message = data.get("message", "").strip()
             room_id = data.get("room_id")
+            if not message or not room_id:
+                return
+
+            info = await self.save_message(room_id, message)
+            if info is None:
+                return
+
             created = datetime.now(timezone.utc).isoformat()
-            if room_id:
-                self.room = await database_sync_to_async(
-                    lambda: Room.objects.select_related('user_a', 'user_b').get(id=room_id)
-                )()
-            await database_sync_to_async(Message.objects.create)(
-                room = self.room,
-                sender = self.user,
-                text = message,
-            )
-            
-            recipient = self.room.user_a if self.room.user_b == self.user else self.room.user_b
-            recipient_group = f"user_chats_{recipient.id}"
-            
-            await self.channel_layer.group_send(self.group_name,{
+
+            await self.channel_layer.group_send(f"chat_product{room_id}", {
                 "type": "chat_message",
                 "message": message,
                 "sender_id": self.user.id,
-                "room_id": self.room.id,
+                "room_id": room_id,
                 "sender_name": self.user.username,
                 "created": created,
             })
-            
-            await self.channel_layer.group_send(recipient_group,{
+
+            await self.channel_layer.group_send(f"user_chats_{info['recipient_id']}", {
                 "type": "new_message_for_user",
-                "room_id": self.room_id,
+                "room_id": room_id,
                 "sender_name": self.user.username,
                 "last_message": message,
-                "product_id": self.product_id,
-                "product_img": self.product_img,
-            })
+                "product_id": info["product_id"],
+                "product_img": info["product_img"],
+            })    
             
-    
     async def disconnect(self, close_code):
         if hasattr(self, "group_name"):
             await self.channel_layer.group_discard(self.group_name,self.channel_name)
@@ -147,4 +141,21 @@ class ChatConsumer(AsyncWebsocketConsumer):
             user_b = user_b
         )
         
-    
+    @database_sync_to_async
+    def save_message(self, room_id, text):
+        try:
+            room = Room.objects.select_related("product").get(id=room_id)
+        except Room.DoesNotExist:
+            return None
+        if self.user.id not in (room.user_a_id, room.user_b_id):
+            return None
+
+        Message.objects.create(room=room, sender=self.user, text=text)
+
+        recipient_id = room.user_a_id if room.user_b_id == self.user.id else room.user_b_id
+        first_img = room.product.images.first()
+        return {
+            "recipient_id": recipient_id,
+            "product_id": room.product_id,
+            "product_img": first_img.image.url if first_img else "/static/images/default.jpg",
+        }
