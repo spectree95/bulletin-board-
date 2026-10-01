@@ -12,12 +12,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if hasattr(self.user, "_wrapped") and self.user._wrapped is not None:
             self.user = self.user._wrapped 
         
-        self.personal_group = f"user_chats_{self.user.id}"
-        await self.channel_layer.group_add(self.personal_group, self.channel_name)
-        
         if self.user.is_anonymous:
             await self.close()
             return
+        
+        self.personal_group = f"user_chats_{self.user.id}"
+        await self.channel_layer.group_add(self.personal_group, self.channel_name)
+        
         
         self.product_id = self.scope["url_route"]["kwargs"].get('pk')
         if self.product_id:
@@ -125,7 +126,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             await self.send(text_data=json.dumps({
                 "message": msg["text"],
                 "sender_name": msg["sender__username"],
-                "created": str(msg["created"])
+                "created": msg["created"].isoformat()
             }))
         
         

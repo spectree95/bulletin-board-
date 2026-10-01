@@ -79,11 +79,13 @@ function openChat(el) {
     input.dataset.productId = productId;
     
     messageContainer.innerHTML = "";
-    
-    ws.send(JSON.stringify({
-        command: "join",
-        room_id: room
-    }));
+
+    if (ws.readyState === WebSocket.OPEN){
+        ws.send(JSON.stringify({
+            command: "join",
+            room_id: room
+        }));
+    } 
 
     
 }
@@ -103,7 +105,7 @@ function openChatByRoom(roomId) {
 }
 
 
-const chatSidebar = document.getElementById("chat-sidebar-list");
+const chatSidebar = document.getElementById("chats-sidebar-list");
 
 if (chatSidebar) {
 
@@ -127,7 +129,7 @@ ws.onmessage = function (event) {
 
 
     if (data.type === "new_message_for_user") {
-        const sidebar = document.getElementById("chat-sidebar-list");
+        const sidebar = document.getElementById("chats-sidebar-list");
         const existingChat = document.querySelector(`[data-room="${data.room_id}"]`);
 
         if (existingChat) {
@@ -140,7 +142,7 @@ ws.onmessage = function (event) {
                 class="chat_item"
                 data-product-id="${data.product_id}"
                 data-room="${data.room_id}"
-                data-user-a="${data.sender_username}"
+                data-user-a="${data.sender_name}"
                 data-user-b=""
                 data-product-img="${data.product_img}"
                 style="text-decoration: none;"
@@ -234,13 +236,14 @@ ws.onmessage = function (event) {
 
     messageEl.innerHTML = `
         <div class="message-text">
-            ${data.message}
+            
         </div>
 
         <div class="message-time">
             ${msgTime}
         </div>
     `;
+    messageEl.querySelector('.message-text').textContent = data.message;
 
 
     dayBlock.appendChild(messageEl);
