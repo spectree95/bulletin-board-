@@ -74,17 +74,18 @@ function openChat(el) {
         document.getElementById("chat-window").style.display = "block";
     }
 
-
+    
     input.dataset.room = room;
     input.dataset.productId = productId;
-
+    
+    messageContainer.innerHTML = "";
+    
     ws.send(JSON.stringify({
         command: "join",
         room_id: room
     }));
 
-
-    messageContainer.innerHTML = "";
+    
 }
 
 
@@ -125,7 +126,7 @@ ws.onmessage = function (event) {
     const data = JSON.parse(event.data);
 
 
-    if (data.type === "new_room_created") {
+    if (data.type === "new_message_for_user") {
         const sidebar = document.getElementById("chat-sidebar-list");
         const existingChat = document.querySelector(`[data-room="${data.room_id}"]`);
 
