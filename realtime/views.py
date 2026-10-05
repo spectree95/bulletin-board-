@@ -37,6 +37,6 @@ class Messenger(ListView):
         queryset = super().get_queryset()
         queryset = queryset.filter(
             Q(user_a = self.request.user) | Q(user_b = self.request.user)
-        ).distinct().order_by("-latest_messages__created")
+        ).distinct().order_by("latest_messages__created")
         return queryset
     

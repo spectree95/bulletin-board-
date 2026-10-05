@@ -158,7 +158,7 @@ ws.onmessage = function (event) {
                             class="chat-username"
                             style="color: black; font-weight: bold; margin: 0;"
                         >
-                            ${data.sender_username}
+                            ${data.sender_name}
                         </p>
                         <p
                             id="chat-${data.room_id}-p"
