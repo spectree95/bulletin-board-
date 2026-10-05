@@ -123,12 +123,26 @@ if (chatSidebar) {
     });
 }
 
+function bumpChat(roomId, text) {
+    const sidebar = document.getElementById("chats-sidebar-list");
+    const item = sidebar.querySelector(`.chat_item[data-room="${roomId}"]`);
+    if (!item) return false;
+
+    const p = document.getElementById(`chat-${roomId}-p`);
+    if (p && text !== undefined) p.textContent = text;
+
+    sidebar.prepend(item); // перемещает существующий элемент наверх
+    return true;
+}
+
+
 ws.onmessage = function (event) {
 
     const data = JSON.parse(event.data);
 
 
     if (data.type === "new_message_for_user") {
+        if (bumpChat(data.room_id, data.last_message)) return;
         const sidebar = document.getElementById("chats-sidebar-list");
         const existingChat = document.querySelector(`[data-room="${data.room_id}"]`);
 
@@ -176,7 +190,9 @@ ws.onmessage = function (event) {
         return;
     }
 
-
+    if (data.room_id) {
+        bumpChat(data.room_id, data.message);
+    }
     const created = new Date(data.created);
 
     const hours = created

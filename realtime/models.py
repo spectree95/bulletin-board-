@@ -9,7 +9,7 @@ class Room(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="rooms")
     user_a = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="rooms_a")
     user_b = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="rooms_b")
-    latest_messages = models.ForeignKey("Message", on_delete=models.SET_NULL, null=True, blank=True, related_name='+')
+    messages = models.ForeignKey("Message", on_delete=models.SET_NULL, null=True, blank=True, related_name='messages')
     
     @property
     def last_message(self):

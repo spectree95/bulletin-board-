@@ -3,7 +3,7 @@ from django.views.generic import DetailView,ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from main.models import Product
 from .models import Room, Message
-from django.db.models import Q
+from django.db.models import Q, Max,F
 
 
 class Chat_author(DetailView):
@@ -35,8 +35,10 @@ class Messenger(ListView):
     
     def get_queryset(self):
         queryset = super().get_queryset()
-        queryset = queryset.filter(
-            Q(user_a = self.request.user) | Q(user_b = self.request.user)
-        ).distinct().order_by("latest_messages__created")
+        queryset = (queryset.filter(Q(user_a = self.request.user) | Q(user_b = self.request.user))
+        .select_related("user_a", "user_b", "product")
+        .annotate(last_activity=Max("messages_created"))
+        .order_by(F("last_activity").desc(nulls_last=True))
+        )
         return queryset
     
