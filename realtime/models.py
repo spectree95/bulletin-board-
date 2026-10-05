@@ -11,8 +11,11 @@ class Room(models.Model):
     user_b = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="rooms_b")
     latest_messages = models.ForeignKey("Message", on_delete=models.SET_NULL, null=True, blank=True, related_name='+')
     
+    @property
+    def last_message(self):
+        return self.messages.order_by("-created").first()
+    
     class Meta:
-        ordering = ["-latest_messages__created"]
         constraints = [ 
             models.UniqueConstraint(fields=['product', 'user_a', 'user_b'], name="unique_name_pair")
         ]
